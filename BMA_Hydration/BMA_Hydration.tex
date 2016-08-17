@@ -51,21 +51,21 @@
 	This work provides a new approach for accurate solvation free energy prediction and lays the foundation for future work on aggregate models that can balance computational cost with predictive accuracy.
 \end{abstract}
 
-\todo{Did Liz, Dennis, Huan, Xiu, or Keith help with this?}
+%%\todo{Did Liz, Dennis, Huan, Xiu, or Keith help with this?}
+%% LJG - All analysis and work was done by the listed authors 
 
-\todo{LG: Share a copy with all participants}
+%%\todo{LG: Share a copy with all participants}
 
-\todo{Move this text somewhere: e.g, uncertainties due to hydrophobicity \cite{Ashbaugh:1999}, surface effects \cite{Chorny:05}, and solvent asymmetries \cite{Mobley:08}.}
+%%\todo{Move this text somewhere: e.g, uncertainties due to hydrophobicity \cite{Ashbaugh:1999}, surface effects \cite{Chorny:05}, and solvent asymmetries \cite{Mobley:08}.}
 
 \section{Introduction} \label{Introduction}
 Accurate calculation of solvent-solute interactions is an important component of robust molecular simulation including protein structure prediction \cite{Levy:03,Robinson:99, Rakhmanov:07}, conformational ensemble calculations \cite{Jorgensen:2004, Cui:2002, Ashbaugh:99,Ashbaugh:2002}, and binding free energy calculations a \cite{Yang:2009, Whalen:2013, Mobley:2009}.
-Solvation energy methods for atomically detailed molecular models have a long history of development \cite{Eisenberg:1986, Kang:1987:1, Kang:1987:2, Kang:1987:3,Kang:1987:4, Tan:2006, Gallicchio:2002, Baker} and have recently benefited from the curation of experimental small molecule solvation data for blind prediction challenges such as the Statistical Assessment of Modeling of Proteins and Ligands (SAMPL) challenge studies \cite{Nicholls:2008, Mobley:2009b, Klimovich:2010, Mobley:2009, Geballe:2012, Geballe:2010, Mobley:2014}.
+Solvation energy methods for atomically detailed molecular models have a long history of development \cite{Eisenberg:1986, Kang:1987:1, Kang:1987:2, Kang:1987:3,Kang:1987:4, Tan:2006, Gallicchio:2002,Baker:2013,Baker:2015} and have recently benefited from the curation of experimental small molecule solvation data for blind prediction challenges such as the Statistical Assessment of Modeling of Proteins and Ligands (SAMPL) challenge studies \cite{Nicholls:2008, Mobley:2009b, Klimovich:2010, Mobley:2009, Geballe:2012, Geballe:2010, Mobley:2014}.
 By presenting a larger range of solvation free energies and molecular weights than seen in common public data sets, these challenges are helping to advance the development of solvation methods to become more robust and accurate in their estimates for a variety of molecular targets~\cite{Ellingson:2014,Muddana:2014,Fu:2014}.  
 
 Consistent across many of these challenge studies is the observation that the top-performing methods typically come from a wide range of different strategies \cite{Nicholls:2008, Mobley:2009b, Mobley:2009, Mobley:2014}.
 Across different challenges, top performers have included explicit solvation methods \cite{Klimovich:2010, Levy:1998, Mobley:2009c}, implicit solvation methods \cite{Mennucci:2007,Jorgensen:2004}, and hybrid methods that combine mixed quantum mechanics (QM) with molecular mechanical (MM) approaches \cite{Konig:2014, Kamerlin:2009}.
-In this context, there is still a significant degree of uncertainty associated with how to best select, specify, and evaluate the set of parameters and mathematical systems needed to accurately estimate solvation free energies.  
-This type of \emph{method selection uncertainty} affects a wide range of scientific and mathematical disciplines and is arguably the greatest source of error and risk associated with estimation tasks \cite{Rojas:2010, Apostolakis:1990, Devooght:1998, Neuman:2003}.
+In this context, there is a significant degree of uncertainty associated with how to best select, specify, and evaluate the set of parameters and mathematical systems needed to accurately estimate solvation free energies: e.g., uncertainties due to hydrophobicity \cite{Ashbaugh:1999}, surface effects \cite{Chorny:05}, and solvent asymmetries \cite{Mobley:08}.  This type of \emph{method selection uncertainty} affects a wide range of scientific and mathematical disciplines and is arguably the greatest source of error and risk associated with estimation tasks \cite{Rojas:2010, Apostolakis:1990, Devooght:1998, Neuman:2003}.
 One of the most powerful ways to address this uncertainty is by combining an ensemble of varied methods (e.g., through a weighted average) to form a single aggregated estimate \cite{Bates:1969, Opitz:1999, Rokach:2010, Hoeting:1999}.
 The motivation behind ensemble approaches is based on two principles: (1) most methods in the ensemble possess some unique, useful information and (2) no single method is sufficient to account for all uncertainties.
 Ensemble-based estimates rely on the combination of information and strengths from individual methods, with their corresponding weaknesses and biases overcome by the strength of the group, resulting in more accurate and robust predictions 
