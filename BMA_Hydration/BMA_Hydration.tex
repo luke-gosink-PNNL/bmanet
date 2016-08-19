@@ -46,7 +46,7 @@
 	Using an iterative statistical process, we have selected and combined solvation energy estimates using an ensemble of 17 diverse methods from the SAMPL4 blind prediction study to form a single, aggregated solvation energy estimate. 
 	The ensemble design process evaluates the statistical information in each individual method as well as the performance of the aggregate estimate obtained from the ensemble as a whole.
 	Methods that possess minimal or redundant information are pruned from the ensemble and the evaluation process repeats until aggregate predictive performance can no longer be improved.
-	We show that this process results in a final aggregate estimate that outperforms all individual methods by reducing estimate errors by 28-91\% to a level of \todo{XYZ kJ mol$^{-1}$} accuracy.
+	We show that this process results in a final aggregate estimate that outperforms all individual methods by reducing estimate errors by 28-91\% to a level of $1.2 - 9.4$ kcal mol$^{-1}$ accuracy.
 	We also compare our iterative refinement approach to other statistical ensemble approaches and demonstrate that this process reduces estimate errors by 25\%-61\%. 
 	This work provides a new approach for accurate solvation free energy prediction and lays the foundation for future work on aggregate models that can balance computational cost with predictive accuracy.
 \end{abstract}
@@ -252,14 +252,14 @@ These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the
 	The listed performance is based on 100 iterations of a 2-fold cross-validation study as described in the text.
 	This performance is also shown graphically in Figure~\ref{Analysis:Figure1:Methods}.
 	The last column is a comparison of each method to the optimal BMA ensemble, BMA (Stage 16).
-	This column indicates that the ensemble design approach presented in this work is able to reduce estimation errors by 29\% to 91\% in comparison to the individual methods.
+	This column indicates that the ensemble design approach presented in this work is able to reduce estimation errors by 29\% to 91\% (i.e., $1.2 - 9.4$ kcal mol$^{-1}$) in comparison to the individual methods.
 	The final BMA ensemble is indicated by the two blue highlighted methods: imp-2 and alc-3.
 	Wilcoxon based $p$-values for BMA's mean RMSE distribution vs.\@ the best method's mean RMSE distribution (imp-2) are shown in Table~\ref{Analysis:Table2:BMA}.}
 	\scriptsize
 	\begin{tabular}{l|r|c|c|c}
 		\hline
 		\hline
-		Reference & Method ID & Methodology & Ensemble Mean RMSE \todo{(units?)} & Performance Improvement \\
+		Reference & Method ID & Methodology & Ensemble Mean RMSE (kcal mol$^{-1}$) & Performance Improvement \\
 		& & & and Standard Deviation & Provided by BMA (Stage 16)\\
 		\hline
 		Coleman et al.~\cite{Coleman:2014} & imp-6  & multi-conformation implicit & 9.40 $\pm$ 2.03 & 91\% \\
@@ -318,7 +318,7 @@ The pruning process was repeated until just two methods are left (Algorithm \ref
 The ensemble of methods whose aggregate forecast has the lowest mean RMSE was saved and returned as the final model for the ensemble.
 This final model, and the set of methods that correspond to this model, were the final products of the statistically driven ensemble design process, referred to as the BMA-based optimal ensemble.
 
-\section{Results and discussion} \label{Results}
+\section{Results and Discussion} \label{Results}
 We report the results of our BMA ensemble predictions in three stages.
 First, we contrast the performance of the initial 17 SAMPL4 methods to the performance of the BMA-based optimal ensemble.
 We then present data on the iterative design process used to create this optimal ensemble.
@@ -326,7 +326,7 @@ Second, we examine the \emph{conditional} performance of this optimal ensemble a
 In this stage, we show how the BMA-based optimal ensemble provides more reliable estimates in comparison to individual methods, especially against the more challenging set of small molecules from the SAMPL4 dataset.
 Finally, we complete the analysis of the optimal ensemble by contrasting its performance to the performance of alternate statistical techniques that can be used to form aggregated estimates. 
 
-As described in Section~\ref{EP:training}, the performance of all methods is based on a mean RMSE.
+The performance of all methods is based on a mean RMSE.
 We report the statistical significance of all performance data through a Wilcoxon rank sum paired comparison test \cite{Wilcoxon:45}.
 This non-parametric approach tests the hypothesis that the mean RMSE distributions of two approaches are equal: $H_0 : \mu_Y = \mu_X$.
 To control the family-wise error rate of our tests, we applied a Bonferroni correction to determine corrected $p$-values with a threshold of $\alpha = 0.05$.
@@ -370,7 +370,7 @@ The ensemble's iterative design process based on Algorithms \ref{Method:Alg1} an
 	\begin{tabular}{l|c|c|c|c|c}
 		\hline
 		\hline
-		Stage & Ensemble mean RMSE \todo{(units?)} & Method Selected & p-value & p-value  & Performance  Benefit\\
+		Stage & Ensemble mean RMSE (kcal mol$^{-1}$) & Method Selected & p-value & p-value  & Performance  Benefit\\
 		 & $\pm$ Standard Deviation & To Be Pruned & (sequential stages) & (stage vs. imp-2)  &  of BMA (Stage 16)\\
 		\hline
 		 1 & 1.40 $\pm$ 0.60 & imp-6 & NA & 0.000 & 41\%\\
@@ -449,7 +449,7 @@ Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} 
 \begin{figure}
 	\centering
 	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/compounds_1}
-	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE \todo{(units?)} performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second and third performing methods (i.e., imp-2, imp-8, and alc-3) as well as exp-3.
+	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE (kcal mol$^{-1}$) performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second and third performing methods (i.e., imp-2, imp-8, and alc-3) as well as exp-3.
 	Note that imp-2 and alc-3 are the methods used in the optimal BMA ensemble (Stage 15) and exp-3 is the final method eliminated from the ensemble (Table~\ref{Analysis:Table2:BMA}) in Stage 16.
 	BMA's performance based on the optimal ensemble is shown based on its distribution of the mean root mean squared error for estimates made in our 2-fold cross-validation analysis.
 	Of note is the performance of the different methods for SAMPL4\_022 (mefenamic acid), SAMPL4\_023 (diphenhydramine), SAMPL4\_027 (1,3-bis-(nitroxy)propane), SAMPL4\_009 (2,6-dichlorosyringaldehyde), and SAMPL4\_001 (mannitol).
@@ -462,7 +462,7 @@ Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} 
 \begin{figure}
 	\centering
 	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/compounds_2}
-	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE \todo{(units?)} performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second and third performing methods (i.e., imp-2, imp-8, and alc-3) as well as exp-3.
+	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE (kcal mol$^{-1}$) performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second and third performing methods (i.e., imp-2, imp-8, and alc-3) as well as exp-3.
 	See Figure \ref{Analysis:Figure4:Compounds1} for more information about both plots.}
 	\label{Analysis:Figure5:Compounds2}
 \end{figure}
@@ -508,15 +508,15 @@ These methods are listed in Table~\ref{Analysis:Table4:EnsembleCompare} and incl
 \end{table}
 %%%
 These techniques were chosen as they have all been used successfully for a variety of inference tasks and are readily available for use~\cite{R:2008,sklearn_api:2013}.
-As all of these approaches construct an estimate for $\beta$, training and predicting with these approaches was performed identically to BMA, using the cross-validation detailed in Section~\ref{EP:training}.
-We also follow the same procedure for comparing BMA?s predictive capability to these alternate ensemble-based techniques.
+As all of these approaches construct an estimate for $\beta$, training and predicting with these approaches was performed identically to BMA, using the cross-validation detailed in Section~\ref{Method:StatEnsemble}.
+We also follow the same procedure for comparing BMA's predictive capability to these alternate ensemble-based techniques.
 Figure~\ref{Analysis:Figure6:Models} and Table~\ref{Analysis:Table4:EnsembleCompare} provide an overview of the cross-validation errors for the various ensemble-based approaches and the BMA-based optimal ensemble.
 %%%
 \begin{figure}
 	\centering
 	\includegraphics[keepaspectratio,width=0.8\textwidth]{Figures/BMA_Xval_baselineModels_RMSE}
 	\caption{This figure displays the performance of different ensemble approaches in comparison to the optimal ensemble designed in this work, BMA (Stage 16).
-	The mean root mean squared error, min, max, first and third quartiles \todo{(units?)} of these ensemble approaches are shown based on the 100 iterations of the 2-fold cross-validation experiment discussed in Section~\ref{Method:StatEnsemble}.
+	The mean root mean squared error, min, max, first and third quartiles (kcal mol$^{-1}$) of these ensemble approaches are shown based on the 100 iterations of the 2-fold cross-validation experiment discussed in Section~\ref{Method:StatEnsemble}.
 	Based on an $\alpha = 0.05$, the Wilcoxon based p-values (Table~\ref{Analysis:Table4:EnsembleCompare}) indicate that BMA's improved performance is statistically significant to the other approaches that can combine an ensemble of methods to make an aggregated estimate.}
 	\label{Analysis:Figure6:Models}
 \end{figure}
