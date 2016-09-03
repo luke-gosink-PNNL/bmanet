@@ -1,5 +1,6 @@
 \documentclass[journal=jpcbfk, manuscript=article]{achemso}
 
+\SectionNumbersOn
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -18,6 +19,7 @@
 \renewcommand\thetable{\Roman{table}}
 
 \newcommand{\todo}[1]{\textbf{$\star \star$ {#1} $\star \star$}}
+\usepackage[margin=10pt,font=small,labelfont=bf]{caption}
 
 \title{Bayesian Model Averaging for Ensemble-Based Estimates of Solvation Free Energies}
 \keywords{solvation free energy, solvation, SAMPL4, statistical design of an ensemble, prediction}
@@ -29,7 +31,7 @@
 \author{Paul D.~Whitney}
 \affiliation{Advanced Computing, Mathematics, and Data Division, Pacific Northwest National Laboratory, Richland, WA 99352, USA}
 \author{David L.~Mobley}
-\affiliation{UC}
+\affiliation{Departments of Pharmaceutical Sciences and Chemistry, University of California, Irvine, Irvine, CA 92697}
 \author{Nathan A.~Baker}
 \affiliation{Advanced Computing, Mathematics, and Data Division, Pacific Northwest National Laboratory, Richland, WA 99352, USA}
 \alsoaffiliation{Division of Applied Mathematics, Brown University, Providence, RI 02912, USA}
@@ -37,6 +39,7 @@
 \phone{+1-509-375-3997}
 
 \begin{document}
+
 
 
 \begin{abstract}
@@ -91,7 +94,7 @@ Given $P$ solvation methods, the combination of all $x_{ij}$ forms the numerical
 where the parameter vector $\beta_j$ defines the unknown relationship between the ensemble's $P$ constituents and $\epsilon_i$ is a disturbance term that captures all factors (e.g., noise and measurement error) that influence the dependent variable $y_i$ \emph{other} than the regressors $x_{ij}$.
 The objective is to estimate the values $\beta_j$ that will fit the known solvation free energy data in $y_i$ and facilitate the ability to predict the solvation free energy of unknown molecules.
 Many different regression techniques can estimate $\beta_j$ \cite{Hosmer:1989, Reiss:2012, Mallows:1973, Candes:2007}; however, these techniques commonly generate estimates that vary in their ability to model and predict \cite{Genell:2010, Hoeting:1999, Davidson:2006, Raftery:1995, Raftery:1998}.  
-The risk and uncertainty associated with using one solvation energy method's estimates over any other method is called \emph{statistical model uncertainty}. Like method selection uncertainty, a common source of error in predictive modeling \cite{Raftery:1995, Raftery:1998, Hoeting:1999, Raftery:2005, Volinsky:1997}.  
+The risk and uncertainty associated with using one solvation energy method's estimates over any other method is called \emph{statistical model uncertainty}. Like method selection uncertainty, model selection uncertainty is a common source of error in predictive modeling tasks \cite{Raftery:1995, Raftery:1998, Hoeting:1999, Raftery:2005, Volinsky:1997}.  
 
 BMA addresses the challenge of statistical model uncertainty by first evaluating all $2^{P}-1$ possible statistical models that can be formed from the $P$ estimation methods and combining each model's $\beta_j$ through a weighted average into an aggregated parameter vector, $\beta_j^{\text{BMA}}$ (Equation~\ref{Method:E2}).
 There are $k = 1, \ldots, 2^P-1$ distinct combinations of the $P$ estimation methods, each with a corresponding statistical model, $M^{(k)}$, and parameter vector, $\beta^{(k)}_j$. 
@@ -287,7 +290,7 @@ These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the
 %%%
 \begin{figure}[h!]
 	\centering
-	\includegraphics[keepaspectratio,width=0.8\textwidth]{Figures/Component_Model_RMSE}
+	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/Component_Model_RMSE}
 	\caption{This figure depicts the mean root mean squared error, min, max, first and third quartiles for the 17 initial methods used in our ensemble design process.
 	Method performance is based on 100 iterations of the 2-fold cross-validation experiment detailed in Algorithm 2.
 	The red line is used to indicate the mean performance of the best method, imp-2; this line is referenced again in Figure~\ref{Analysis:Figure2:BMA} to show how the ensemble tuning process compares to the performance of this best solvation method.}
@@ -422,7 +425,7 @@ Figure~\ref{Analysis:Figure3:P-not} depicts a heat-map that shows the statistica
 %%%
 \begin{figure}[h!]
 	\centering
-	\includegraphics[keepaspectratio,width=0.99\textwidth]{Figures/P_Not_Zero_Per_Stage}
+	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/P_Not_Zero_Per_Stage}
 	\caption{This image provides a graphical depiction of the ensemble design process performed on the initial ensemble of 17 methods.
 	The color scale represents the probability, 0 - 100\%, that a given method's coefficient term, $\beta_j$ will not be zero.
 	The stages in the design process, starting at the left and moving to the right, are shown on the x-axis.
@@ -448,7 +451,7 @@ Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} 
 %%%
 \begin{figure}
 	\centering
-	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/compounds_1}
+	\includegraphics[keepaspectratio,width=0.75\textwidth]{Figures/compounds_1}
 	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE (kcal mol$^{-1}$) performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second and third performing methods (i.e., imp-2, imp-8, and alc-3) as well as exp-3.
 	Note that imp-2 and alc-3 are the methods used in the optimal BMA ensemble (Stage 15) and exp-3 is the final method eliminated from the ensemble (Table~\ref{Analysis:Table2:BMA}) in Stage 16.
 	BMA's performance based on the optimal ensemble is shown based on its distribution of the mean root mean squared error for estimates made in our 2-fold cross-validation analysis.
@@ -461,7 +464,7 @@ Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} 
 %%%
 \begin{figure}
 	\centering
-	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/compounds_2}
+	\includegraphics[keepaspectratio,width=0.75\textwidth]{Figures/compounds_2}
 	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE (kcal mol$^{-1}$) performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second and third performing methods (i.e., imp-2, imp-8, and alc-3) as well as exp-3.
 	See Figure \ref{Analysis:Figure4:Compounds1} for more information about both plots.}
 	\label{Analysis:Figure5:Compounds2}
@@ -514,7 +517,7 @@ Figure~\ref{Analysis:Figure6:Models} and Table~\ref{Analysis:Table4:EnsembleComp
 %%%
 \begin{figure}
 	\centering
-	\includegraphics[keepaspectratio,width=0.8\textwidth]{Figures/BMA_Xval_baselineModels_RMSE}
+	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/BMA_Xval_baselineModels_RMSE}
 	\caption{This figure displays the performance of different ensemble approaches in comparison to the optimal ensemble designed in this work, BMA (Stage 16).
 	The mean root mean squared error, min, max, first and third quartiles (kcal mol$^{-1}$) of these ensemble approaches are shown based on the 100 iterations of the 2-fold cross-validation experiment discussed in Section~\ref{Method:StatEnsemble}.
 	Based on an $\alpha = 0.05$, the Wilcoxon based p-values (Table~\ref{Analysis:Table4:EnsembleCompare}) indicate that BMA's improved performance is statistically significant to the other approaches that can combine an ensemble of methods to make an aggregated estimate.}
