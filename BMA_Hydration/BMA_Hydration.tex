@@ -46,8 +46,8 @@
 	Using an iterative statistical process, we have selected and combined solvation energy estimates using an ensemble of 17 diverse methods from the SAMPL4 blind prediction study to form a single, aggregated solvation energy estimate. 
 	The ensemble design process evaluates the statistical information in each individual method as well as the performance of the aggregate estimate obtained from the ensemble as a whole.
 	Methods that possess minimal or redundant information are pruned from the ensemble and the evaluation process repeats until aggregate predictive performance can no longer be improved.
-	We show that this process results in a final aggregate estimate that outperforms all individual methods by reducing estimate errors by 28-91\% to a level of $1.2 - 9.4$ kcal mol$^{-1}$ accuracy.
-	We also compare our iterative refinement approach to other statistical ensemble approaches and demonstrate that this process reduces estimate errors by 25\%-61\%. 
+	We show that this process results in a final aggregate estimate that outperforms all individual methods by reducing estimate errors by as much as 91\% to $1.2$ kcal mol$^{-1}$ accuracy.
+	We also compare our iterative refinement approach to other statistical ensemble approaches and demonstrate that this iterative process reduces estimate errors by as much as 61\%. 
 	This work provides a new approach for accurate solvation free energy prediction and lays the foundation for future work on aggregate models that can balance computational cost with predictive accuracy.
 \end{abstract}
 
@@ -253,7 +253,7 @@ These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the
 	This performance is also shown graphically in Figure~\ref{Analysis:Figure1:Methods}.
 	The last column is a comparison of each method to the optimal BMA ensemble, BMA (Stage 16).
 	This column indicates that the ensemble design approach presented in this work is able to reduce estimation errors by 29\% to 91\% (i.e., $1.2 - 9.4$ kcal mol$^{-1}$) in comparison to the individual methods.
-	The final BMA ensemble is indicated by the two blue highlighted methods: imp-2 and alc-3.
+	The final BMA ensemble is indicated by the two italicized methods: imp-2 and alc-3.
 	Wilcoxon based $p$-values for BMA's mean RMSE distribution vs.\@ the best method's mean RMSE distribution (imp-2) are shown in Table~\ref{Analysis:Table2:BMA}.}
 	\scriptsize
 	\begin{tabular}{l|r|c|c|c}
@@ -276,9 +276,9 @@ These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the
 		Jambeck et al.~\cite{Jambeck:2013} & alc-1  & alchemical MD & 1.52 $\pm$ 0.20 & 46\%\\ 
 		Park~\cite{Park:2014} & imp-3  & single conformation implicit & 1.44 $\pm$ 0.20 & 43\%\\
 		Klamt et al.~\cite{Klamt:2010} & imp-1  & single conformation implicit & 1.36 $\pm$ 0.30 & 40\%\\	
-		\textcolor{blue}{Gilson et al.~\cite{Muddana:2014}} & \textcolor{blue}{alc-3}  & \textcolor{blue}{alchemical MD} & \textcolor{blue}{1.24 $\pm$ 0.17} & \textcolor{blue}{34\%} \\ 
+		\textit{Gilson et al.~\cite{Muddana:2014}} & \textit{alc-3}  & \textit{alchemical MD} & {1.24 $\pm$ 0.17} & {34\%} \\ 
 		Geballe et al.~\cite{Ellingson:2014} & imp-8  & single conformation implicit & 1.17 $\pm$ 0.17 & 30\%\\
-		\textcolor{blue}{Sandberg et al.~\cite{Sandberg:2013}} & \textcolor{blue}{imp-2}  & \textcolor{blue}{multi-conformation implicit} & \textcolor{blue}{1.15 $\pm$ 0.23} & \textcolor{blue}{29\%}\\
+		\textit{Sandberg et al.~\cite{Sandberg:2013}} & \textit{imp-2}  & \textit{multi-conformation implicit} & \textit{1.15 $\pm$ 0.23} & \textit{29\%}\\
 		\textbf{BMA (Stage 16)} & \textbf{NA} & \textbf{ensemble} & \textbf{0.82} $\pm$ \textbf{0.15} & \textbf{0} \\
 		\hline
 	\end{tabular}
@@ -535,8 +535,6 @@ In future work we will look at penalizing computationally expensive methods that
 
 \subsection*{Acknowledgments}
 This research was funded by NIH grant R01 GM069702 to NAB.
-
-\todo{Need to fix several of the references}
 
 \bibliography{refs}
 
