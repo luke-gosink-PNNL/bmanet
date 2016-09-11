@@ -255,15 +255,16 @@ These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the
 	The listed performance is based on 100 iterations of a 2-fold cross-validation study as described in the text.
 	This performance is also shown graphically in Figure~\ref{Analysis:Figure1:Methods}.
 	The last column is a comparison of each method to the optimal BMA ensemble, BMA (Stage 16).
-	This column indicates that the ensemble design approach presented in this work is able to reduce estimation errors by 29\% to 91\% (i.e., $1.2 - 9.4$ kcal mol$^{-1}$) in comparison to the individual methods.
+	This column indicates that the ensemble design approach presented in this work is able to reduce estimation errors by 29\% to 91\% (i.e., 1.2--9.4 kcal mol$^{-1}$) in comparison to the individual methods.
 	The final BMA ensemble is indicated by the two italicized methods: imp-2 and alc-3.
 	Wilcoxon based $p$-values for BMA's mean RMSE distribution vs.\@ the best method's mean RMSE distribution (imp-2) are shown in Table~\ref{Analysis:Table2:BMA}.}
 	\scriptsize
 	\begin{tabular}{l|r|c|c|c}
 		\hline
 		\hline
-		Reference & Method ID & Methodology & Ensemble Mean RMSE (kcal mol$^{-1}$) & Performance Improvement \\
-		& & & and Standard Deviation & Provided by BMA (Stage 16)\\
+		Reference 	& Method	& Methodology	& Ensemble Mean				& Improvement \\
+					& ID 		&				& RMSE (kcal mol$^{-1}$)	& with BMA  \\
+					& 			&				& and Std Dev	& (Stage 16) \\
 		\hline
 		Coleman et al.~\cite{Coleman:2014} & imp-6  & multi-conformation implicit & 9.40 $\pm$ 2.03 & 91\% \\
 		Parsod et al. & alc-5 &  alchemical MD & 4.50 $\pm$ 0.71 & 82\% \\ 
@@ -337,7 +338,7 @@ Thus when comparing BMA to a given method, a Wilcoxon generated $p$-value greate
 On the other hand, Wilcoxon-generated $p$-values that are less than 0.05 indicate we should reject $H_0$.
 In this latter case, we then compare the mean RMSE for BMA and the given method to assess performance.
 
-\subsection{Comparing estimates from BMA's optimal ensemble to SAMPL4 challenge methods} \label{Results:BMA_Methods}
+\subsection{Comparing estimates from BMA's optimal ensemble to SAMPL\-4 challenge methods} \label{Results:BMA_Methods}
 The performance of all methods used in this work is shown in Table~\ref{Analysis:Table1:Methods} and Figure~\ref{Analysis:Figure1:Methods}.
 Column 3 in Table~\ref{Analysis:Table1:Methods} lists the specific method for each estimation approach.
 The performance results in column 4 of this table are consistent with results reported by Mobley et al. \cite{Mobley:2014}.
@@ -373,8 +374,9 @@ The ensemble's iterative design process based on Algorithms \ref{Method:Alg1} an
 	\begin{tabular}{l|c|c|c|c|c}
 		\hline
 		\hline
-		Stage & Ensemble mean RMSE (kcal mol$^{-1}$) & Method Selected & p-value & p-value  & Performance  Benefit\\
-		 & $\pm$ Standard Deviation & To Be Pruned & (sequential stages) & (stage vs. imp-2)  &  of BMA (Stage 16)\\
+		Stage	& Ensemble RMSE		& Method 			& $p$-value		& $p$-value		& Improvement \\
+				& (kcal mol$^{-1}$)	& Selected for		& (sequential 	& (stage vs.	& with BMA \\
+				& Mean and Std Dev	& Pruning			& stages)		& imp-2)		& (Stage 16) \\
 		\hline
 		 1 & 1.40 $\pm$ 0.60 & imp-6 & NA & 0.000 & 41\%\\
 		 2  & 1.32 $\pm$ 0.53 & alc-4&  \textbf{0.411} (vs. Stage 1) & 0.002 & 38\%\\
@@ -496,8 +498,8 @@ These methods are listed in Table~\ref{Analysis:Table4:EnsembleCompare} and incl
 	\begin{tabular}{lccc}
 		\hline
 		\hline
-		Ensemble Model  & Ensemble Mean RMSE  & p-value & Performance Improvement\\
-		 & and Standard Deviation & & Provided by BMA (Stage 16)\\
+		Ensemble Model  & Ensemble Mean RMSE  & p-value & Improvement\\
+		 & and Std Dev & & by BMA (Stage 16)\\
 		\hline
 		Random Forest & 2.08 $\pm$1.00 & 0.00 & 61\%\\
 		Ridge & 2.06 $\pm$0.75 & 0.00 & 60\%\\
