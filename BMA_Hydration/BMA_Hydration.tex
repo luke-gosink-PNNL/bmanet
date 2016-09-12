@@ -1,6 +1,7 @@
-\documentclass[journal=jpcbfk, manuscript=article]{achemso}
+% FOR ARXIV \documentclass[journal=jpcbfk, manuscript=article]{achemso}
+\documentclass{amsart}
 
-\SectionNumbersOn
+%\SectionNumbersOn
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -20,25 +21,31 @@
 
 \newcommand{\todo}[1]{\textbf{$\star \star$ {#1} $\star \star$}}
 \usepackage[margin=10pt,font=small,labelfont=bf]{caption}
+\usepackage[margin=1in]{geometry}
+\usepackage[compress&sort]{cite}
+
+\begin{document}
 
 \title{Bayesian Model Averaging for Ensemble-Based Estimates of Solvation Free Energies}
 \keywords{solvation free energy, solvation, SAMPL4, statistical design of an ensemble, prediction}
 
-\author{Luke J.~Gosink}
-\author{Christopher C.~Overall}
+\author{Luke J.\ Gosink}
+\author{Christopher C.\ Overall}
 \author{Sarah M.~Reehl}
-\affiliation{Computational and Statistical Analytics Division, Pacific Northwest National Laboratory, Richland, WA 99352, USA}
-\author{Paul D.~Whitney}
-\affiliation{Advanced Computing, Mathematics, and Data Division, Pacific Northwest National Laboratory, Richland, WA 99352, USA}
-\author{David L.~Mobley}
-\affiliation{Departments of Pharmaceutical Sciences and Chemistry, University of California, Irvine, Irvine, CA 92697}
-\author{Nathan A.~Baker}
-\affiliation{Advanced Computing, Mathematics, and Data Division, Pacific Northwest National Laboratory, Richland, WA 99352, USA}
-\alsoaffiliation{Division of Applied Mathematics, Brown University, Providence, RI 02912, USA}
+% FOR ARXIV \affiliation{Computational and Statistical Analytics Division, Pacific Northwest National Laboratory, Richland, WA 99352, USA}
+\address{Computational and Statistical Analytics Division, Pacific Northwest National Laboratory, Richland, WA 99352, USA}
+\author{Paul D.\ Whitney}
+% FOR ARXIV \affiliation{Advanced Computing, Mathematics, and Data Division, Pacific Northwest National Laboratory, Richland, WA 99352, USA}
+\address{Advanced Computing, Mathematics, and Data Division, Pacific Northwest National Laboratory, Richland, WA 99352, USA}
+\author{David L.\ Mobley}
+% FOR ARXIV \affiliation{Departments of Pharmaceutical Sciences and Chemistry, University of California, Irvine, Irvine, CA 92697}
+\address{Departments of Pharmaceutical Sciences and Chemistry, University of California, Irvine, Irvine, CA 92697}
+\author{Nathan A.\ Baker}
+% FOR ARXIV \affiliation{Advanced Computing, Mathematics, and Data Division, Pacific Northwest National Laboratory, Richland, WA 99352, USA}
+% FOR ARXIV \alsoaffiliation{Division of Applied Mathematics, Brown University, Providence, RI 02912, USA}
+\address{Advanced Computing, Mathematics, and Data Division, Pacific Northwest National Laboratory, Richland, WA 99352, USA; Division of Applied Mathematics, Brown University, Providence, RI 02912, USA}
 \email{nathan.baker@pnnl.gov}
-\phone{+1-509-375-3997}
-
-\begin{document}
+%\phone{+1-509-375-3997}
 
 
 \begin{abstract}
@@ -53,12 +60,8 @@
 	This work provides a new approach for accurate solvation free energy prediction and lays the foundation for future work on aggregate models that can balance computational cost with predictive accuracy.
 \end{abstract}
 
-%%\todo{Did Liz, Dennis, Huan, Xiu, or Keith help with this?}
-%% LJG - All analysis and work was done by the listed authors 
-
-%%\todo{LG: Share a copy with all participants}
-
-%%\todo{Move this text somewhere: e.g, uncertainties due to hydrophobicity \cite{Ashbaugh:1999}, surface effects \cite{Chorny:05}, and solvent asymmetries \cite{Mobley:08}.}
+% FOR ARXIV \begin{document}
+\maketitle
 
 \section{Introduction} \label{Introduction}
 Accurate calculation of solvent-solute interactions is an important component of robust molecular simulation including protein structure prediction \cite{Levy:03,Robinson:99, Rakhmanov:07}, conformational ensemble calculations \cite{Jorgensen:2004, Cui:2002, Ashbaugh:99,Ashbaugh:2002}, and binding free energy calculations \cite{Yang:2009, Whalen:2013, Mobley:2009}.
@@ -540,6 +543,8 @@ In future work we will look at penalizing computationally expensive methods that
 \subsection*{Acknowledgments}
 This research was funded by NIH grant R01 GM069702 to NAB.
 
+% FOR ARXIV
+\bibliographystyle{unsrt}
 \bibliography{refs}
 
 \end{document}
