@@ -25,13 +25,13 @@ test$winner <- unlist(winner)
 
 #--------- Calculate RMSE --------------#
 getRMSE <- function(pred, truth){
-  return abs(truth - pred)
+  return (truth - pred)^2
 }
 
 unsplit_drug_data <- group_by(test, SAMPL4_ID) %>%
-  mutate(bma = sqrt((BMA_Mean - Exp_Val)^2), alc.3 = getRMSE(X544.gilsonlab, Exp_Val), imp.8 = getRMSE(X566.geballe,Exp_Val),
-                                              imp.2 = getRMSE(X145.lhs.sampl4, Exp_Val), exp.3 = getRMSE(X548.jiafu, Exp_Val), best = getRMSE(winner, Exp_Val)) %>%
-  summarise(bma_se = sd(bma)/10, bma = mean(bma), alc.3 = first(alc.3), imp.8 = first(imp.8), imp.2 = first(imp.2), exp.3 = first(exp.3), best = first(best))
+  mutate(bma = sqrt((BMA_Mean - Exp_Val)^2), alc.3 = sqrt((X544.gilsonlab- Exp_Val)^2), imp.8 = sqrt((X566.geballe-Exp_Val)^2),
+                                              imp.2 = sqrt((X145.lhs.sampl4 - Exp_Val)^2), exp.3 = sqrt((X548.jiafu - Exp_Val)^2), best = sqrt((winner - Exp_Val)^2)) %>%
+  summarise(bma_se = sd(bma)/10, bma = mean(bma), alc.3 = mean(alc.3), imp.8 = mean(imp.8), imp.2 = mean(imp.2), exp.3 = mean(exp.3), best = mean(best))
 
 #-------- split the data in half ---------#
 
@@ -107,7 +107,7 @@ q <- ggplot(drug_data_split_2)+
   theme_bw()+
   scale_x_reverse(breaks = 1:nlevels(melted2$SAMPL4_ID),
                   labels = levels(melted2$SAMPL4_ID))+
-  scale_y_continuous(limits = c(-5,5))+
+  scale_y_continuous(limits = c(0,4.5))+
   scale_fill_manual(values = "lightsteelblue")+
   #scale_shape_manual(values = c(15,16,17,18))+
   scale_shape_manual(values = c(15,16,17))+
@@ -160,7 +160,7 @@ q <- ggplot(drug_data_split_1)+
   theme_bw()+
   scale_x_reverse(breaks = 1:nlevels(melted$SAMPL4_ID),
                   labels = levels(melted$SAMPL4_ID))+
-  scale_y_continuous(limits = c(-5,5))+
+  scale_y_continuous(limits = c(0,4.5))+
   scale_fill_manual(values = "lightsteelblue")+
   #scale_shape_manual(values = c(15,16,17,18))+
   scale_shape_manual(values = c(15,16,17))+
