@@ -71,7 +71,6 @@ This paper demonstrates the ability of an ensemble approach called Bayesian Mode
 Though BMA has been applied successfully for prediction tasks in many other domains \cite{Ye:2004, Vlachopoulo:2013, Raftery:2005, Morales-Casique:2010, Gosink:2014} this is the first application of the BMA approach to solvation energy prediction.
 
 \section{Methods} \label{MethodMain}
-\todo{check with coauthors on this paragraph}
 
 This work provides a framework for addressing the uncertainties associated with estimating  small molecule hydration free energies. 
 At a high level, the framework begins by evaluating \emph{all methods} collectively as an ensemble and uses the ensemble to make an aggregate estimate. 
@@ -300,7 +299,7 @@ These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the
 		Klamt et al.~\cite{Klamt:2010} & imp-1 &hours & single conformation implicit & 1.36 $\pm$ 0.030 & 40\%\\	
 		\textit{Gilson et al.~\cite{Muddana:2014}} & \textit{alc-3} & hours & \textit{alchemical MD} & {1.24 $\pm$ 0.017} & {34\%} \\ 
 		Geballe et al.~\cite{Ellingson:2014} & imp-8 & seconds & single conformation implicit & 1.17 $\pm$ 0.017 & 30\%\\
-		\textit{Sandberg et al.~\cite{Sandberg:2013}} & \textit{imp-2} &hour  & \textit{multi-conformation implicit} & \textit{1.15 $\pm$ 0.023} & \textit{29\%}\\
+		\textit{Sandberg et al.~\cite{Sandberg:2013}} & \textit{imp-2} &minutes  & \textit{multi-conformation implicit} & \textit{1.15 $\pm$ 0.023} & \textit{29\%}\\
 		\textbf{BMA (Stage 16)} & \textbf{NA} & seconds & \textbf{ensemble} & \textbf{0.82} $\pm$ \textbf{0.015} & \textbf{0} \\
 		\hline
 	\end{tabular}
@@ -562,16 +561,34 @@ It is thus feasible that the ensemble design process has identified a statistica
 To test this hypothesis, the ensemble design process would need to expand to include more chemical exemplars that are similar to SAMPL4\_024 and SAMPL4\_047. 
 Under such an extended study, it is likely that the design process would be able to augment the existing model, adding additional methods as needed in order to more accurately estimate these new compounds.
 
-The final observation is that this framework has found a single, consistent method to combine two methods to form a more optimal method for estimating hydration free energies.
-These methods are based on two different approaches for modeling: one is based on a multi-conformational implicit methods and requires tens of minutes to make a prediction, where as the other is based on molecular dynamics and requires many hours to make a prediction. 
-
+This statistical framework has designed a single model for combining two methods in order to estimate hydration free energies for any compound in the SAMPL4 challenge.
+These method constituents are based on two different approaches for predicting hydration free energy: one is based on a multi-conformational implicit methods and requires tens of minutes to make a prediction, where as the other is based on molecular dynamics and requires many hours to make the same prediction. 
+The benefit of this model, is not just in the fact that it provides optimal performance through its estimates.
+Rather, the model defines a \emph{linear relationship} between two very different approaches that can be used to test and refine these individual methods independently and in-concert of each other.
+In this way the optimal ensemble is not necessarily the end solution, but rather a tool that can help facilitate an iterative design process to help methods  gradually converge and eventually replace the statistical blackbox.
+Additionally, we envision that through this type of framework, groups of computationally less expensive methods may be able to outperform and replace more expensive methods.
 
 
 \subsection{Performance analysis of alternate ensemble techniques}
 \label{Results:BMA_Variants}
 There are other approaches beside BMA that can combine an ensemble of methods into an aggregate estimate.
+The notion of method and statistical sensitivities are also points of concern for these approaches too.
 In our cross-validation study, we evaluated four common approaches for aggregating an ensemble and evaluated their estimated benefits in comparison to BMA.
 These methods are listed in Table~\ref{Analysis:Table4:EnsembleCompare} and include: Random Forest~\cite{Breiman:2001}, Ridge Regression~\cite{Hoerl:2000}, Lasso~\cite{Tibshirani:1994}, and stepwise regression via forward selection.
+
+The difference between the BMA approach and these other approaches is in their design process.
+More specifically, each approach has a strategy for performing model specification (e.g., Section~\ref{MethodMain}).
+As we have addressed the notion of method sensitivities in the last section, the objective for this section is to compare these different approaches for model construction to highlight the effects of model sensitivities.
+As each method will select its own methods to form its own ensemble, the difference in performance for these approaches will highlight the benefits of addressing model sensitivities.
+In other words, relying on a modeling approach that does not fully address these sensitivities can mislead analysis of ensemble performance and thwart subsequent ensemble design.
+
+The random forests approach is an ensemble learning method similar to BMA. It operates by constructing a multitude of decision trees at training time and outputs an estimate based on the mean prediction of the individual trees. 
+Where as the random forest algorithm relies on the non-informative weighting, BMA's approach relies on a bayesian weighting for each estimate.
+The random forest approach is well established in its use for computational biology and bioinformatic data modeling.
+
+
+
+
 %%%
 \begin{table}[h!]
 	\centering
