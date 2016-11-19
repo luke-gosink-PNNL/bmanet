@@ -584,13 +584,22 @@ In other words, relying on a modeling approach that does not fully address these
 
 The random forests approach is an ensemble learning method similar to BMA. It operates by constructing a multitude of decision trees at training time and outputs an estimate based on the mean prediction of the individual trees. 
 Where as the random forest algorithm relies on the non-informative weighting, BMA's approach relies on a bayesian weighting for each estimate.
-The random forest approach is well established in its use for computational biology and bioinformatic data modeling.
+The random forest approach is well established in computational biology and bioinformatic applications.
 
+The ridge regression approach is a technique for analyzing regression data that may suffer from multicollinearity. 
+When multicollinearity occurs, it can create inaccurate estimates of the regression coefficients, $\beta_j$, resulting in an increase of standard error.
+Ridge regression addresses the concerns for high variance by adding a degree of bias to the regression estimates that will reduce overall estimate errors. 
 
+The last two approaches, Lasso and forward selection, are both strategies for selecting methods to use in a linear regression model (Equation~\ref{Method:E1}). 
+In forward selection, the approach starts with the assumption that all coefficients, $\beta_j$ are equal to zero.
+Next, it selects the method, $x_ij$ most correlated with $y_i$, and adds it into the model. 
+It then assess the performance of the model and continues to add the next highest correlated methods to the model until performance no longer increases.
+Lasso follows the same general approach, but doesn't add a method fully into the model.
+Instead, Lasso penalizes the absolute size of the regression coefficients until the coefficient, $\beta_j$ for the method being added is no longer the one most correlated method with overall performance.
 
 
 %%%
-\begin{table}[h!]
+\begin{table}[t!]
 	\centering
 	\caption[Model comparison with mean RMSE]{This table lists the performance of different ensemble approaches in comparison to the optimal ensemble designed in this work through BMA.
 	The performance of these ensemble approaches, given as the mean RMSE with standard deviation, are based on the 100 iterations of the 2-fold cross-validation experiment discussed in Section~\ref{Method:StatEnsemble}.
