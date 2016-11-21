@@ -121,7 +121,13 @@ where $B^{(k)}$ is the Bayesian Information Criteria for model $M^{(k)}$ estimat
 \begin{equation} \label{Method:E4} 
 	B^{(k)} \approx N \log{(1-R^{2(k)})} + p^{(k)} \log{N}.
 \end{equation}
-Here $R^{2(k)}$ is the adjusted $R^2$ for model $M^{(k)}$ that indicates the model's goodness of fit for the observations, $p^{(k)}$ is the number of methods used by the model (not including the intercept), and $N$ is the number of solvation free energy values to be predicted (i.e., the number of molecules). 
+The Bayesian Information Criteria (BIC) is a method for ranking models based on the model's goodness of fit, $R^2$.
+The $R^2$ is a statistical measure of how close the data are to the fitted regression line.
+It is basically the percentage of the response variable variation that is explained by a linear mode.
+
+In contrast to other information criteria, the BIC strongly penalizes models for having too many parameters. 
+In essence, the BIC strikes a parsimonious balance between sufficient complexity for a model to be useful, but not so complex as to be overfitting. 
+In Equation~\ref{Method:E4},  $R^{2(k)}$ is this adjusted $R^2$ for model $M^{(k)}$ that indicates the model's goodness of fit for the observations, $p^{(k)}$ is the number of methods used by the model (not including the intercept), and $N$ is the number of solvation free energy values to be predicted (i.e., the number of molecules). 
 
 The parameter vector $\beta_j^{\text{BMA}}$ obtained from Equation~\ref{Method:E2} helps to address model uncertainty by accounting for all systems of linear equations that can model the relationship between the measured solvation free energy values $y_i$ and values $x_{ij}$ predicted by each solvation method $j$.
 Over-fitting by more complicated models is addressed through the Bayes information criterion, which penalizes models with more variables.
@@ -597,6 +603,38 @@ It then assess the performance of the model and continues to add the next highes
 Lasso follows the same general approach, but doesn't add a method fully into the model.
 Instead, Lasso penalizes the absolute size of the regression coefficients until the coefficient, $\beta_j$ for the method being added is no longer the one most correlated method with overall performance.
 
+Table~\ref{Analysis:Table5:EnsembleVariables} lists the methods that were selected by each modeling approach. From largest to smallest ensemble the modeling ensembles are: Random Forest 14, Ridge Regression 7, Lasso 4, Forward Selection 4, and BMA 2.
+
+\begin{table}[t!]
+	\centering
+	\caption[Methods used by each modeling approach]{This table lists the different methods used by each modeling approach in Section~\ref{Results:BMA_Variants}.  The performance for each of these methods is listed in Table~\ref{Analysis:Table4:EnsembleCompare} and Figure~\ref{Analysis:Figure6:Models}. Starting from the top and working down, the total number of methods used in each ensemble are: Random Forest 14, Ridge Regression 7, Lasso 4, Forward Selection 4, and BMA 2.}
+	\footnotesize
+	\begin{tabular}{lccccccccc}
+		\hline
+		\hline
+		Model  & imp-1 & alc-5 & imp-4 & exp-3 & imp-5 & alc-2 & exp-1 & exp-4 & alc-4\\
+		\hline
+		Random Forest & X & X & - & X & - & X & X & X & -\\
+		Ridge & - & X & - & - & - & X & X & - & -\\
+		Lasso & - & - & - & - & - & - & - & - & -\\
+		Forward Selection & - & - & - & - & - & - & - & X & -\\
+		BMA (Stage 16) & - & - & - & - & - & - & - & - & -\\		
+		\hline
+		\\
+		\hline
+		Model & imp-7 & hyb-2 & alc-1 & imp-3 & imp-1 & alc-3 & imp-8 & imp-2 &\\
+		\hline
+		Random Forest & X & X & X & X & X & X & X & X &\\
+		Ridge & - & - & X & X & - & X & - & X &\\
+		Lasso & - & - & X & X & - & X & - & X &\\
+		Forward Selection & - & - & - & X & - & X & - & X &\\
+		BMA (Stage 16) & - & - & - & - & - & X & - & X &\\		
+		\hline
+		\hline
+	\end{tabular}
+	\label{Analysis:Table5:EnsembleVariables}
+\end{table}
+
 
 %%%
 \begin{table}[t!]
@@ -625,6 +663,7 @@ Instead, Lasso penalizes the absolute size of the regression coefficients until 
 %%%
 These techniques were chosen as they have all been used successfully for a variety of inference tasks and are readily available for use~\cite{R:2008,sklearn_api:2013}.
 As all of these approaches construct an estimate for $\beta$, training and estimating with these approaches was performed identically to BMA, using the cross-validation detailed in Section~\ref{Method:StatEnsemble}.
+More specifically, the performance reflects the result of 100-iterations of a 2-fold cross-validation.
 We also followed the same procedure for comparing BMA's estimating capability to these alternate ensemble-based techniques.
 Figure~\ref{Analysis:Figure6:Models} and Table~\ref{Analysis:Table4:EnsembleCompare} provide an overview of the cross-validation errors for the various ensemble-based approaches and the BMA-based optimal ensemble.
 %%%
