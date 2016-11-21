@@ -51,12 +51,13 @@
 	We show that this process results in a final aggregate estimate that outperforms all individual methods by reducing estimate errors by as much as 91\% to $1.2$ kcal mol$^{-1}$ accuracy.
 	We also compare our iterative refinement approach to other statistical ensemble approaches and demonstrate that this iterative process reduces estimate errors by as much as 61\%. 
 	This work provides a new approach for accurate solvation free energy prediction and lays the foundation for future work on aggregate models that can balance computational cost with predictive accuracy.
+	%DLM: ``predictive accuracy'' -- as per my e-mail comments, it's worth noting that you actually do no predictions here, and it's not clear to me how you would apply this approach predictively (i.e. what if SAMPL6 revisited hydration free energies and you wanted to apply this approach there?) so if you want to mention ``predictive'' you may need to discuss this in the paper.
 \end{abstract}
 
 
 \section{Introduction} \label{Introduction}
 Accurate calculation of solvent-solute interactions is an important component of robust molecular simulation including protein structure prediction \cite{Levy:03,Robinson:99, Rakhmanov:07}, conformational ensemble calculations \cite{Jorgensen:2004, Cui:2002, Ashbaugh:99,Ashbaugh:2002}, and binding free energy calculations \cite{Yang:2009, Whalen:2013, Mobley:2009}.
-Solvation energy methods for atomically detailed molecular models have a long history of development \cite{Eisenberg:1986, Kang:1987:1, Kang:1987:2, Kang:1987:3,Kang:1987:4, Tan:2006, Gallicchio:2002,Baker:2013,Baker:2015} and have recently benefited from the curation of experimental small molecule solvation data for blind prediction challenges such as the Statistical Assessment of Modeling of Proteins and Ligands (SAMPL) challenge studies \cite{Nicholls:2008, Mobley:2009b, Klimovich:2010, Mobley:2009, Geballe:2012, Geballe:2010, Mobley:2014}.
+Solvation free energy methods for atomically detailed molecular models have a long history of development \cite{Eisenberg:1986, Kang:1987:1, Kang:1987:2, Kang:1987:3,Kang:1987:4, Tan:2006, Gallicchio:2002,Baker:2013,Baker:2015} and have recently benefited from the curation of experimental small molecule solvation data for blind prediction challenges such as the Statistical Assessment of Modeling of Proteins and Ligands (SAMPL) challenge studies \cite{Nicholls:2008, Mobley:2009b, Klimovich:2010, Mobley:2009, Geballe:2012, Geballe:2010, Mobley:2014}.
 By presenting a larger range of solvation free energies and molecular weights than seen in common public datasets, these challenges are helping to advance the development of solvation methods,  enabling them to become more robust and accurate in their estimates for a variety of molecular targets~\cite{Ellingson:2014,Muddana:2014,Fu:2014}.  
 
 Consistent across many of these challenge studies is the observation that the top-performing methods typically come from a wide range of different strategies \cite{Nicholls:2008, Mobley:2009b, Mobley:2009, Mobley:2014}.
@@ -67,22 +68,27 @@ The motivation behind ensemble approaches is based on two principles: (1) most m
 When modeled correctly, the information and strengths of individual methods can be combined, and their corresponding weaknesses and biases can be overcome by the strength of the group~\cite{Seni:2010, Hoeting:1999,Raftery:1998,Raftery:1995}.  
 Ensemble-based estimates are therefore expected to be more reliable and accurate than individual methods, an expectation that has been upheld in numerous examples \cite{Gosink:2014, Zhang:2003, Bates:1969, Morales-Casique:2010, Opitz:1999, Rokach:2010, Hoeting:1999, Seni:2010, Raftery:2005, Vlachopoulo:2013, Seni:2010, Hoeting:1999, Raftery:1998, Raftery:1995}.
 
+%DLM: I think somewhere right around here you need to define how you are going to use the term `model' in this paper versus how you will use the term `method', as the Methods section and some of the material later hinges on the distinction between a `model' and a `method' and this is not made super obvious. You want to say exactly what they mean, i.e. ``Here, we use the term `method' to refer to a specific method (and associated set of parameters, settings, etc.) used to estimate solvation free energies, and the term `model' to refer to some approach for estimating solvation free energies that could be a weighted combination of estimates from one or more methods.'' You'll probably want to restate this in brief again later as well.
 This paper demonstrates the ability of an ensemble approach called Bayesian Model Averaging (BMA) \cite{Hoeting:1999} to estimate solvation free energies for 45 small molecules by combining predictions from 17 diverse methods provided by the SAMPL4 challenge dataset \cite{Mobley:2014}.
 Though BMA has been applied successfully for prediction tasks in many other domains \cite{Ye:2004, Vlachopoulo:2013, Raftery:2005, Morales-Casique:2010, Gosink:2014} this is the first application of the BMA approach to solvation energy prediction.
 
 \section{Methods} \label{MethodMain}
 
+
 This work provides a framework for addressing the uncertainties associated with estimating  small molecule hydration free energies. 
 At a high level, the framework begins by evaluating \emph{all methods} collectively as an ensemble and uses the ensemble to make an aggregate estimate. 
 The framework then iteratively prunes redundant or less-accurate methods from the ensemble to identify the best possible combination of methods to use for estimating hydration free energy.
 While improved estimates are certainly an important objective for this framework, we are equally interested in providing a better interpretation of the statistical ``black box'' behind these aggregate estimates. 
-Specifically, if an aggregate estimate proves to be more accurate than individual methods, it is imperative to understand which methods are important to combine and how they are combined so that domain knowledge may be obtained from the statistical aggregation process.
+Specifically, if an aggregate estimate proves to be more accurate than individual methods, it is imperative to understand which methods are important to combine
+%DLM: I don't totally understand this phrasing ``which methods are important to combine''; I think you're commenting on which methods carry information that is not captured by the other methods, or something along those lines? 
+ and how they are combined so that domain knowledge may be obtained from the statistical aggregation process.
 For example, is the optimal ensemble composed solely of implicit or explicit methods, or is it composed of a variety of different methods?
-If the ensemble is largely of one type of method, what are the subtle difference in the implementation of these methods (e.g., variations in small molecule fore fields) ? 
+If the ensemble is largely of one type of method, what are the subtle difference in the implementation of these methods (e.g., variations in small molecule force fields)? 
 How are these methods weighted to form the aggregate?
 Our eventual objective with this framework is to use this type of information as a feedback loop that helps researchers with an iterative refinement of methods and their implementation.
 
 Throughout this paper, we use the term ``methods'' to describe the individual approaches to calculate solvation energies and the term ``models'' to describe statistical ensembles of method predictions.  
+%DLM: OK, so I see that you make this point about models vs methods here, though I'd note it's only a single sentence and is in the ``methods'' section which many readers consider optional. You probably have to make it more prominent since it's such a key point.
 We also define the term optimality, or optimal performance, as a forecasting method that provides the best \emph{overall} performance based on a variety of predictive targets: e.g., targets randomly selected through cross-validation experiments.
 The forecasting approach that provides the best overall performance based on mean cross-validation results is optimal in comparison to alternate approaches.
 
@@ -131,12 +137,15 @@ In Equation~\ref{Method:E4},  $R^{2(k)}$ is this adjusted $R^2$ for model $M^{(k
 
 The parameter vector $\beta_j^{\text{BMA}}$ obtained from Equation~\ref{Method:E2} helps to address model uncertainty by accounting for all systems of linear equations that can model the relationship between the measured solvation free energy values $y_i$ and values $x_{ij}$ predicted by each solvation method $j$.
 Over-fitting by more complicated models is addressed through the Bayes information criterion, which penalizes models with more variables.
+%DLM: How does this idea, penalizing models with more variables, come in to play here if at all? i.e., I don't even know the number of variables for most of the SAMPL methods... Is this paragraph just describing things which COULD be done? I think it needs to be made more clear.
+%DLM: Later -- ah, OK, maybe this is a difference between a `method' and a `model' and you're here referring to MODELS with some number of parameters which average over methods; you are unconcerned with how many parameters the methods have. I'll suggest a terminology change earlier based on this. (I also found where you DO define this above, but it hadn't stuck with me when I read it. I'm leaving this here so you can get a sense of how people might get confused.)
 Perhaps more importantly, $\beta_j^{\text{BMA}}$ can be used to estimate new solvation free energy values for unmeasured molecules by combining new $x_{i j}$ estimates.
 
 \subsection{Pruning models with Occam's window} \label{Method:StatEnsemble}
 
 The inclusion of all $2^P-1$ models in Equation~\ref{Method:E2} is not necessarily beneficial for predictive performance.
 While some models provide accurate information that will boost the ensemble's predictive accuracy and robustness, many models will be misspecified.
+%DLM: What does `misspecified' mean here?
 The cumulative effect of these misspecified models, despite the fact that they are down-weighted via low posterior probabilities, can erode the ensemble's overall performance \cite{Qian:2015, Martinez-Munoz:2009, Raftery:1998, Onorante:2014, Madigan:1994, Hoeting:1999, Morales-Casique:2010}.
 Madigan and Raftery~\cite{Madigan:1994} developed the Occam's Window ensemble-pruning approach that eliminates under-performing models based on Bayesian information criteria.
 Occam's Window defines a set of models
@@ -164,14 +173,22 @@ where
 	\end{cases}
 \end{equation}
 Equation~\ref{Method:E7} can be used to sort and prioritize the methods based on their utility; i.e., the probability that the coefficient term weighting a method's estimate will not be 0.
-The combination of Equations~\ref{Method:E6} and ~\ref{Method:E7} therefore provide a statistical framework to support an iterative, statistical process for designing an ensemble that will provide the best combination of models and methods for estimating solvation free energy.
+%DLM: I don't understand the sentence just prior; is this giving a formal definition of ``utility''? And, are you saying the goal is that each model has nonzero coefficients for all methods? 
+%Also, the ``can be used'' phrasing is not helpful as it doesn't actually say that this is what you did, it just says that one could do this. 
+The combination of Equations~\ref{Method:E6} and ~\ref{Method:E7} therefore provide a statistical framework to support an iterative, statistical process for designing an ensemble that will provide the best combination of models and methods for estimating solvation free energy. %DLM: Why models AND methods? Aren't you just taking models and combining them into methods? This (and discussion later) makes it sound like you are making models which consist of other models and of methods.
 
+%DLM: I don't totally understand this whole section just prior, at least not without digging in to the details and background. Superficially it sounds like you are saying that you want to not consider certain models (because doing so would degrade your accuracy) so you prioritize models which perform well. However, I don't understand how you can know which models will perform well until you know the answers. 
+
+%DLM: Overall, I think the section reads as though it's written for people already very familiar with this area (which I'm not), and reminds me of the comment I made by e-mail that a major point of this work is to educate people on how to do this. This sentence doesn't really do any educating, or at least doesn't educate me. 
 
 
  \subsection{Statistical design of method ensembles}
  \label{Method:StatEnsemble:Design}
 At a summary level the statistical design process, shown in Algorithms~\ref{Method:Alg1} and~\ref{Method:Alg2}, proceeds in two iterative stages.  
 The first stage, presented in Algorithm~\ref{Method:Alg2}, is the analysis stage and its function is to evaluate the statistical significance of each method in the current version of the ensemble via Equation~\ref{Method:E7}.
+%DLM: Why is the first stage given in Algorithm 2? Seems odd.
+%DLM: By e-mail, I had written this comment which applies to Algorithm 1 and Algorithm 2:
+%It seems like a major point of this work is to educate people on how to do this type of thing/show that it can be done. If that's the case, I think more work needs to go into clarity of terminology/definitions/etc. Perhaps source code could also be provided. To be specific, I find the code in "Algorithm 1" and "Algorithm 2" very hard to read and there are many things there I don't understand. For example, what does the left arrow mean? What is "r" in algorithm 1? Why is the rmse set to infinity initially? I think it would be good to try and carefully edit the whole thing with an eye to how to explain to/show to a novice what this means and how to do it... (I could edit at that level if given enough time, but presumably there's not enough time for that right now.)
 This information is based on a set of 2-fold cross-validation tests that randomly create training and validation datasets from the small molecule compounds  in the SAMPL4 challenge.
 In these tests, each method's statistical information is thus evaluated against a variety of random training and validation sets.
 The results of this first stage are then sent to stage two (Algorithm~\ref{Method:Alg1}): the ensemble pruning stage.
@@ -181,7 +198,7 @@ The process then repeats using the new, pruned ensemble.
 By monitoring the performance of each ensemble across the pruning process, the ideal set of methods is able to be identified.
 
 At a more detailed level, the design process assumes an initial set of $n$ estimates made by $p$ methods, $\textbf{x}^{n \times p}$ for observations, $\textbf{y}^{n \times 1}$.
-The second and third lines initialize the root mean squared error (RMSE) and the solution for the best ensemble of models and methods.
+The second and third lines initialize the root mean squared error (RMSE) and the solution for the best ensemble of models and methods. %DLM: ``models and methods'' again.
 The algorithm will iterate over the following tasks while the algorithm still has more than two methods to evaluate (line 5 - line 19).
 
 \begin{table}[t] 
@@ -189,6 +206,7 @@ The algorithm will iterate over the following tasks while the algorithm still ha
 		\begin{algorithm}[H] 
 			\footnotesize 
 			\caption{\newline Prune and Design Ensemble} \label{Method:Alg1} 
+			%DLM: This pseudocode needs help/clarification; see comments on Algorithm 2 below and apply here as well. Basically I just can't follow it yet.
 			\begin{algorithmic}[1] 
 				{\scriptsize 
 				\REQUIRE \textbf{vector} $\textbf{y}^{n \times 1}$, \textbf{matrix} $\textbf{x}^{n \times p}$\; 
@@ -225,18 +243,24 @@ The algorithm will iterate over the following tasks while the algorithm still ha
 			\caption{\newline Analyze Methods} \label{Method:Alg2} 
 			\begin{algorithmic}[1] 
 				{\scriptsize 
+				%DLM: In this algorithm, you seem to have shifted what superscripts denote from denoting a particular model (in the Methods section) to denoting the dimensions of the matrix (??) here, if I read it right. You shouldn't do such a shift without stating it.
 				\REQUIRE  \textbf{vector} $\textbf{y}^{n \times 1}$, \textbf{matrix} $\textbf{m}^{n \times j}: j \leq p$\; 
+				%Could you say what matrix small m is, please? It doesn't seem to be stated in the text.
 				\vspace{2.5mm} 
 				\STATE $cv = 100$\; \COMMENT{100 cross-validation experiments}\; 
 				\STATE $\beta_{BMA}^{1 \times j} = \textbf{0}^{1 \times j}$\; 
+				%DLM: I have no idea what $\textbf{0}^{1 \times j}$ means. Is this some sort of array initialization?
 				\STATE $error = 0$\; 
 				\STATE $\textbf{v}^{1 \times j} = \textbf{0}^{1 \times j}$\; 
+				%DLM: v is in boldface but beta, above, is not. Why? They're being set equal to the same thing. 
 				\WHILE{$($$index$ $<$ $cv$$)$}\; 
 					\STATE $\textbf{m}_{t}^{q \times j}, \textbf{m}_{v}^{r \times j} =\ \textbf{m}^{n \times j}$\;
 					\COMMENT{split $\textbf{m}$ into \textbf{t}rain and \textbf{v}alidate}\; 
+					%DLM: Why are t in train and v in validate in bold? 
 					\STATE $\boldsymbol{\beta}_{BMA} = \boldsymbol{\beta}_{BMA} + $BMA$(\textbf{m}_{t})$ \COMMENT{Equation~\ref{Method:E6}}\; 
 					\STATE $error = error + RMSE(\textbf{Y}, \textbf{m}_{v} \times \boldsymbol{\beta}_{BMA})$\; 
 					\STATE $\textbf{v} = \textbf{v} + $P$\neq$0$(\textbf{m}_{t})$ \COMMENT{Equation~\ref{Method:E7}}\; 
+					%DLM: Why is this added to v? (And what is v?)
 					\STATE $index = index + 1$ 
 				\ENDWHILE\; 
 				\RETURN $\frac{\beta_{BMA}}{cv}$,$\frac{error}{cv}$,$\frac{\textbf{v}}{cv}$\; } 
@@ -248,6 +272,7 @@ The algorithm will iterate over the following tasks while the algorithm still ha
 First, the performance of the current ensemble is evaluated through \emph{AssessMethods} (line 6).
 The \emph{AssessMethods} function, shown in Algorithm \ref{Method:Alg2}, takes as input the same observation data, \textbf{y}, as Algorithm \ref{Method:Alg1}, as well as a set of $N$ estimates made by a subset of $j \leq p$ methods.
 Algorithm \ref{Method:Alg2} performs 100 iterations of a 2-fold cross-validation and begins by partitioning the estimate matrix $\mathbf{m}$ equally into training and validation data (line 6).
+%DLM: This is where my comment earlier (by e-mail) about how the data is partitioned applies -- normally in machine learning i.e. in drug discovery there is a huge difference between randomly partitioning the data between training and validation sets and partitioning it in some other way (by molecule size, by discovery date, by polarity, etc...) because it tends to be that in drug discovery, BY DESIGN, the later compounds are different than the former compounds, so you can't necessarily predict the later ones well from the former ones.  That is, the training and test sets are not drawn from the same distribution. In this study, you're deliberately making the training and test sets be drawn from the same distribution which will make your performance appear higher than it would in a predictive challenge (where your test set may be drawn from a different distribution). This will at least need to be discussed in the paper.
 Using the training data, the algorithm uses Equation~\ref{Method:E6} to estimate $\beta_{BMA}$ and then calculates the RMSE of this coefficient vector based on the validation data (lines 7 and 8).
 Next, the $\mathrm{Pr}(\beta_j^{\text{BMA}}\neq 0)$ of each method are calculated and saved in the vector, \textbf{v} (line 9).
 After 100 iterations, the function returns an estimate for $\beta_j^{\text{BMA}}$, the mean RMSE of the current ensemble, as well as a list of all methods and their corresponding probability values for $\mathrm{Pr}(\beta_j^{\text{BMA}}\neq 0)$. 
@@ -258,9 +283,10 @@ The output of this process is an ensemble of methods, $\textbf{x}_{ij}$ that are
 \subsection{Solvation free energy data and solvation methods} \label{EP:DataModels}
 The SAMPL4 challenge consists of 49 submissions representing a total of 19 different research groups \cite{Mobley:2014}.
 Each of these methods provides solvation free energy estimates for 45 small molecule compounds.\footnote{The original SAMPL4 study used 52 samples; thus some samples have labels like SAMPL4\_052. However, several compounds were removed during the course of the study based on ``problems with experimental values, SMILES strings, or structures for a number of compounds, resulting in removal of some compounds from the challenge.''\cite{Mobley:2014}}
-The challenge is blind in the sense that the solvation free energy values for these molecules were hidden from participants; e.g., energy values are not found in standard solvation free energy test sets, and their values are not readily available in the literature \cite{Guthrie:2014}. 
+The challenge is blind in the sense that the solvation free energy values for these molecules were hidden from participants; e.g., free energy values are not found in standard solvation free energy test sets, and their values are not readily available in the literature \cite{Guthrie:2014}. 
 In this work, we restrict our analysis to a subset of 17 method submissions based on the fact that many groups made multiple submissions that were strongly correlated.
 In these cases, we chose only a single variant to ensure that multicollinearity did not inflate the significance of specific methods during model selection and averaging; such bias can create unstable estimates for $\beta^{BMA}_j$ and that in turn can reduce BMA's estimate accuracy \cite{Clyde:1999}.
+%DLM: So if you were applying this prospectively, how would you do it? Would you run a variety of methods and only include methods with low correlation between their results? What if correlation is because they are quite predictive of experiment rather than because they agree with one another?  Or would it require a human going through and including things which are ``different'' from one another regardless of whether the results agree or not?
 These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the methods used to calculate the solvation energy: 
 \begin{itemize} 
 	\item \textbf{Group 1:} Single-conformation implicit solvent methods \cite{Ellingson:2014, Nicholl:2010, Hawkins} based on Poisson-Boltzmann and related methods \cite{Fixman:1979, Honig:1995, Davis:1990};
@@ -338,6 +364,7 @@ An RMSE was obtained for the 26 estimates made on validation data.
 
 This process was repeated 100 times (Algorithm \ref{Method:Alg2}) so that performance for any estimation method could be reported as a mean RMSE: i.e., the mean of 100 RMSEs that each represent performance for a 2-fold cross-validation using the 26 member validation set described above.
 In addition to the mean RMSE, the information content provided by each method in the ensemble is also returned. 
+%DLM: This paragraph confuses me, as does the mention of ``the validation set'' since it should be ``the validation setS'' if in fact a new validation set was selected each of the 100 trials. 
 
 Algorithm \ref{Method:Alg1} used this information to perform two tasks.
 First, if the performance of this aggregated estimate was better than all previously examined aggregates, the statistical model combining these methods was saved as the new optimal model (Algorithm \ref{Method:Alg1}, lines 7-9).
@@ -361,13 +388,15 @@ In contrast to standard deviation, which quantifies the spread of the cross-vali
 We report the statistical significance of all performance data through a Wilcoxon rank sum paired comparison test \cite{Wilcoxon:45}.
 This non-parametric approach tests the hypothesis that the mean RMSE distributions of two approaches are equal: $H_0 : \mu_Y = \mu_X$.
 To control the family-wise error rate of our tests, we applied a Bonferroni correction to determine corrected $p$-values with a threshold of $\alpha = 0.05$.
+%DLM: Bonferroni -- again, if the purpose of this paper is to educate, you will probably want to say what this means.
 Thus when comparing BMA to a given method, a Wilcoxon generated $p$-value greater than 0.05 indicates we fail to reject $H_0$: the distributions are thus equal and we conclude that BMA and the method are equivalent in their performance.
 On the other hand, Wilcoxon generated $p$-values that are less than 0.05 indicate we should reject $H_0$.
 In this latter case, we then compare the mean RMSE for BMA and the given method to assess performance.
 
-Finally, a Shapiro-Wilk test~\cite{Shapiro:65} was used to test the hypothesis, $H_{0}$, that residuals in the SAMPL4 challenge are not significantly different from a normal population.
+Finally, a Shapiro-Wilk test~\cite{Shapiro:65} was used to test the hypothesis, $H_{0}$, that residuals in the SAMPL4 challenge are not significantly different from a normal population. %DLM: Say what Shapiro-Wilk is?
 Under an $\alpha = 0.05$, a p-value statistic of 0.9556 was obtained from this test, indicating that there was insufficient information to reject $H_{0}$. 
 Without evidence to reject $H_{0}$, assumptions of normality indicate that the expectation for the disturbance terms $\epsilon_i$ in Equation~\ref{Method:E1} (e.g., sources associated with measurement error, stochastic effects, etc.) sum to 0 and are ignored.
+%DLM: "are ignored" -- i.e. assumptions of normality indicate that these are ignored? Or they indicate that we can ignore these, and so we do? 
 
 %We further evaluate $H_{0}$ graphically through a normal probability plot~\cite{WIlk:68} as shown in Figure~\ref{Analysis:Figure:QQPlot}.
 %\begin{figure}[h!]
@@ -513,7 +542,7 @@ Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} 
 In addition to the optimal ensemble, we also show the performance of the first, second, and third best-performing methods from the SAMPL4 challenge: imp-2, imp-8, and alc-3.
 Methods imp-2 and alc-3 are the methods used in the optimal BMA ensemble and exp-3 is the final method eliminated from the ensemble (Stage 15 in Table~\ref{Analysis:Table2:BMA}). 
 
-Mobley et al.~\cite{Mobley:2014} note that predictive error generally increases as molecular complexity and size increases. 
+Mobley et al.~\cite{Mobley:2014} note that prediction error generally increases as molecular complexity and size increases. 
 Specifically, polyfunctional molecules with several interacting groups were especially difficult to estimate in the SAMPL4 challenge: SAMPL4\_022 (mefenamic acid), SAMPL4\_023 (diphenhydramine), SAMPL4\_027 (1,3-bis-(nitroxy)propane), SAMPL4\_009 (2,6-dichlorosyringaldehyde), and SAMPL4\_001 (mannitol). 
 Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} show that the optimal ensemble outperforms all methods in estimating SAMPL4\_022 and SAMPL4\_001, and provides the second best estimates for SAMPL4\_009, SAMPL4\_023 and SAMPL4\_027.
 Aside from the optimal ensemble, there is no clear best method for estimating these compounds.
@@ -524,6 +553,7 @@ The general trend in performance indicates that the optimal ensemble provides mo
 
 \subsection{Interpreting aggregate estimate performance}
 Aggregate estimate performance is degraded by the both the predictive sensitivities of its method constituents and the uncertainties associated with statistical model construction.
+%DLM: I don't understand the prior sentence. What's a predictive sensitivity? Are you saying that models do badly both because they can contain bad methods, and because there are uncertainties connected with how the models are built?
 These sources of error manifest in different ways and we can use the characterizations of estimation accuracy and consistency to support our analysis of these sources.
 
 If methods are sensitive to functional discrepancies between training and testing molecules, then aggregate estimates that rely on these methods may perform poorly on chemical  compounds that are outside the training set. 
@@ -540,8 +570,8 @@ the sensitivities associated with statistical model construction.
 Statistical sensitivities in a model manifest in estimate consistency in a cross-validation study.
 In this work, the 95\% confidence intervals of the expected mean provide a quantitative metric for assessing these types of sensitivities. 
 Under the assumption of minimal method sensitivity, a perfect statistical model will provide very precise and accurate estimates, regardless of training and testing data.
-The further away a statistical model is from the this hypothetical ``perfect'' model, the more uncertainty will impact how weights are assigned in its coefficient vector, $\beta_j$.
-As a result, changes in training or testing data will results in an increasingly wider distribution of estimates (i.e., wider confidence intervals) and will impact the models accuracy.
+The further away a statistical model is from this hypothetical ``perfect'' model, the more uncertainty will impact how weights are assigned in its coefficient vector, $\beta_j$.
+As a result, changes in training or testing data will results in an increasingly wider distribution of estimates (i.e., wider confidence intervals) and will impact the model's accuracy.
 In extreme cases, these distributions may even become bimodal.
 
 In this work, the overall performance of the aggregate estimate is very consistent across chemical compounds (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2},) with the exception of SAMPL4\_001 and SAMPL4\_045.
@@ -566,13 +596,18 @@ Additionally, SAMPL4\_047 is listed as the second largest hydration free energy 
 It is thus feasible that the ensemble design process has identified a statistical model that is valid for lighter weight, lower hydration free energy compounds but is not sufficiently accurate for larger compounds with higher free energy values.
 To test this hypothesis, the ensemble design process would need to expand to include more chemical exemplars that are similar to SAMPL4\_024 and SAMPL4\_047. 
 Under such an extended study, it is likely that the design process would be able to augment the existing model, adding additional methods as needed in order to more accurately estimate these new compounds.
+%DLM: I'm not sure what this means. Are you saying that if there were more big compounds included in new data, predictions would still be accurate because the model construction would pick methods which get these ``right'' and include them? What about if there are physical effects here that none of the models capture? (i.e. protonation state or tautomer changes in SAMPL5 for example) It seems to me that you can't get something for nothing, so this may be overoptimistic.
 
 This statistical framework has designed a single model for combining two methods in order to estimate hydration free energies for any compound in the SAMPL4 challenge.
 These method constituents are based on two different approaches for predicting hydration free energy: one is based on a multi-conformational implicit methods and requires tens of minutes to make a prediction, where as the other is based on molecular dynamics and requires many hours to make the same prediction. 
 The benefit of this model, is not just in the fact that it provides optimal performance through its estimates.
 Rather, the model defines a \emph{linear relationship} between two very different approaches that can be used to test and refine these individual methods independently and in-concert of each other.
+%DLM: WHat exactly do you mean by this last one? e.g. how would you use this idea? I'm not quite sure what you're getting at. You have a model that uses these two methods to estimate free energies, but then what? 
 In this way the optimal ensemble is not necessarily the end solution, but rather a tool that can help facilitate an iterative design process to help methods  gradually converge and eventually replace the statistical blackbox.
+%DLM: I don't understand this last point either.
 Additionally, we envision that through this type of framework, groups of computationally less expensive methods may be able to outperform and replace more expensive methods.
+
+%DLM: This seems like where you would want to discuss how you would actually apply this in a new blind challenge -- i.e. imagine SAMPL6 was like SAMPL4 but on new compounds, what would YOU do with your approach to participate (rather than retrospectively analyze) in the challenge? 
 
 
 \subsection{Performance analysis of alternate ensemble techniques}
@@ -599,7 +634,7 @@ Ridge regression addresses the concerns for high variance by adding a degree of 
 The last two approaches, Lasso and forward selection, are both strategies for selecting methods to use in a linear regression model (Equation~\ref{Method:E1}). 
 In forward selection, the approach starts with the assumption that all coefficients, $\beta_j$ are equal to zero.
 Next, it selects the method, $x_ij$ most correlated with $y_i$, and adds it into the model. 
-It then assess the performance of the model and continues to add the next highest correlated methods to the model until performance no longer increases.
+It then assesses the performance of the model and continues to add the next highest correlated methods to the model until performance no longer increases.
 Lasso follows the same general approach, but doesn't add a method fully into the model.
 Instead, Lasso penalizes the absolute size of the regression coefficients until the coefficient, $\beta_j$ for the method being added is no longer the one most correlated method with overall performance.
 
