@@ -292,11 +292,11 @@ These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the
 		Coleman et al.~\cite{Coleman:2014} & imp-6  & seconds & multi-conformation implicit & 9.40 $\pm$ 0.2 & 91\% \\
 		Parsod et al. & alc-5 & hours & alchemical MD & 4.50 $\pm$ 0.071 & 82\% \\ 
 		Sharp et al.~\cite{Yang:2006} & imp-4 &minutes& single conformation implicit & 3.80 $\pm$ 0.045 & 78\% \\
-		Jiafu et al. & exp-3 &hours& QM/MD & 2.80 $\pm$ 0.045 & 71\% \\
+		Jiafu et al. & hyb-3 &hours& QM/MD & 2.80 $\pm$ 0.045 & 71\% \\
 		Purisima et al.~\cite{Hogues:2014} & imp-5&minutes  & single conformation implicit & 2.55 $\pm$ 0.049 & 68\%\\
 		Mark et al.~2011 & alc-2 & hours&alchemical MD & 2.40 $\pm$ 0.036 & 66\%\\ 
-		Genheden et al.~\cite{Genheden:2014} & exp-1&hours  & MM-PB/SA & 2.00 $\pm$ 0.022 & 59\%\\
-		Weyang et al. & exp-4 &hours & MM-PB/SA & 1.84 $\pm$ 0.031 & 55\%\\		
+		Genheden et al.~\cite{Genheden:2014} & hyb-1&hours  & MM-PB/SA & 2.00 $\pm$ 0.022 & 59\%\\
+		Weyang et al. & hyb-4 &hours & MM-PB/SA & 1.84 $\pm$ 0.031 & 55\%\\		
 		Biorga et al.~\cite{Beckstein:2012,Beckstein:2014} & alc-4& hours & alchemical MD & 1.65 $\pm$ 0.013 & 50\%\\ 
 		Elingson et al.~\cite{Ellingson:2014} & imp-7 &seconds & single conformation implicit & 1.52 $\pm$ 0.039 & 46\%\\
 		Fennell et al.~\cite{Li:2014} & hyb-2 & hours & hybrid & 1.52 $\pm$ 0.013 & 46\%\\																
@@ -429,10 +429,10 @@ The ensemble's iterative design process based on Algorithms \ref{Method:Alg1} an
 		 9 & 1.03 $\pm$ 0.020 & imp-1 & \textbf{1.000}  (vs. Stage 8)& 0.001 & 20\%\\
 		 10 & 0.99 $\pm$ 0.017 & imp-4 & 0.000  (vs. Stage 9)& 0.001 & 17\%\\
 		 11 & 0.96 $\pm$ 0.018 & alc-1 & 0.000  (vs. Stage 10) & 0.000 & 15\%\\														
-		 12 & 0.93 $\pm$ 0.018 & exp-4 &  \textbf{1.000}  (vs. Stage 11)& 0.000 & 12\%\\
+		 12 & 0.93 $\pm$ 0.018 & hyb-4 &  \textbf{1.000}  (vs. Stage 11)& 0.000 & 12\%\\
 		 13 & 0.90 $\pm$ 0.017 & hyb-2 & \textbf{1.000}  (vs. Stage 12) &0.000 &  09\%\\															
-		 14 & 0.90 $\pm$ 0.018 & exp-1 & \textbf{1.000}   (vs. Stage 13)& 0.000 & 09\%\\															
-		 15 & 0.91 $\pm$ 0.018 & exp-3 &   0.001 (vs. Stage 14)&  0.000  & 10\%\\																
+		 14 & 0.90 $\pm$ 0.018 & hyb-1 & \textbf{1.000}   (vs. Stage 13)& 0.000 & 09\%\\															
+		 15 & 0.91 $\pm$ 0.018 & hyb-3 &   0.001 (vs. Stage 14)&  0.000  & 10\%\\																
 		 16 & 0.82 $\pm$ 0.015 & NA  & 0.000   (vs. Stage 15)&0.000 &  0\%\\
 		\hline
 		\hline
@@ -474,7 +474,7 @@ Figure~\ref{Analysis:Figure3:P-not} depicts a heat-map that shows the statistica
 	The methods in each ensemble are shown on the y-axis; note that the methods are listed (from top to bottom) in the order that they are pruned in the design process.
 	Thus at Stage 1, all methods are used in the ensemble and their $\mathrm{Pr}(\beta_j^{\text{BMA}}\neq 0) $ range from ~40\% (e.g., imp-6) to ~90\% (imp-2).
 	By Stage 3, imp-6 and alc-4 have been pruned from the ensemble and the probability values have adjusted accordingly as shown in the colored column above Stage 3.
-	In general the trend across the different stages of pruning illustrates that methods become increasingly lighter, i.e., the ensemble design process becomes increasingly confident that these methods (e.g., imp-7 and exp-4) are not needed in the ensemble.
+	In general the trend across the different stages of pruning illustrates that methods become increasingly lighter, i.e., the ensemble design process becomes increasingly confident that these methods (e.g., imp-7 and hyb-4) are not needed in the ensemble.
 	Contrariwise, the $\mathrm{Pr}(\beta_j^{\text{BMA}}\neq 0) $ for a few methods (e.g., alc-3, and imp-2) remain above 70\% and even increase throughout the design process, indicating a high degree of confidence in the statistical significance of these methods.}
 	\label{Analysis:Figure3:P-not}
 \end{figure}
@@ -492,8 +492,8 @@ Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} 
 \begin{figure}
 	\centering
 	\includegraphics[keepaspectratio,width=0.75\textwidth]{Figures/Rev2/error_bar_plot_no_best_split_1}
-	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE (kcal mol$^{-1}$) performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second, and third best-performing methods (i.e., imp-2, imp-8, and alc-3) as well as exp-3.
-	Note that imp-2 and alc-3 are the methods used in the optimal BMA ensemble (Stage 15) and exp-3 is the final method eliminated from the ensemble (Table~\ref{Analysis:Table2:BMA}) in Stage 16.
+	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE (kcal mol$^{-1}$) performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second, and third best-performing methods (i.e., imp-2, imp-8, and alc-3) as well as hyb-3.
+	Note that imp-2 and alc-3 are the methods used in the optimal BMA ensemble (Stage 15) and hyb-3 is the final method eliminated from the ensemble (Table~\ref{Analysis:Table2:BMA}) in Stage 16.
 	BMA's performance based on the optimal ensemble is shown based on its distribution of the mean RMSE for estimates made in our 2-fold cross-validation analysis.
 	Of note is the performance of the different methods for SAMPL4\_022 (mefenamic acid), SAMPL4\_023 (diphenhydramine), SAMPL4\_027 (1,3-bis-(nitroxy)propane), SAMPL4\_009 (2,6-dichlorosyringaldehyde), and SAMPL4\_001 (mannitol).
 	These are the most challenging compounds for methods to estimate based on the analysis of Mobley et al.\@ of the SAMPL4 data~\cite{Mobley:2014}.
@@ -505,13 +505,13 @@ Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} 
 \begin{figure}
 	\centering
 	\includegraphics[keepaspectratio,width=0.75\textwidth]{Figures/Rev2/error_bar_plot_no_best_split_2}
-	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE (kcal mol$^{-1}$) performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second, and third best-performing methods (i.e., imp-2, imp-8, and alc-3) as well as exp-3.
+	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE (kcal mol$^{-1}$) performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second, and third best-performing methods (i.e., imp-2, imp-8, and alc-3) as well as hyb-3.
 	See Figure \ref{Analysis:Figure4:Compounds1} for more information about both plots.}
 	\label{Analysis:Figure5:Compounds2}
 \end{figure}
 %%%
 In addition to the optimal ensemble, we also show the performance of the first, second, and third best-performing methods from the SAMPL4 challenge: imp-2, imp-8, and alc-3.
-Methods imp-2 and alc-3 are the methods used in the optimal BMA ensemble and exp-3 is the final method eliminated from the ensemble (Stage 15 in Table~\ref{Analysis:Table2:BMA}). 
+Methods imp-2 and alc-3 are the methods used in the optimal BMA ensemble and hyb-3 is the final method eliminated from the ensemble (Stage 15 in Table~\ref{Analysis:Table2:BMA}). 
 
 Mobley et al.~\cite{Mobley:2014} note that predictive error generally increases as molecular complexity and size increases. 
 Specifically, polyfunctional molecules with several interacting groups were especially difficult to estimate in the SAMPL4 challenge: SAMPL4\_022 (mefenamic acid), SAMPL4\_023 (diphenhydramine), SAMPL4\_027 (1,3-bis-(nitroxy)propane), SAMPL4\_009 (2,6-dichlorosyringaldehyde), and SAMPL4\_001 (mannitol). 
@@ -612,7 +612,7 @@ Table~\ref{Analysis:Table5:EnsembleVariables} lists the methods that were select
 	\begin{tabular}{lccccccccc}
 		\hline
 		\hline
-		Model  & imp-1 & alc-5 & imp-4 & exp-3 & imp-5 & alc-2 & exp-1 & exp-4 & alc-4\\
+		Model  & imp-1 & alc-5 & imp-4 & hyb-3 & imp-5 & alc-2 & hyb-1 & hyb-4 & alc-4\\
 		\hline
 		Random Forest & X & X & - & X & - & X & X & X & -\\
 		Ridge & - & X & - & - & - & X & X & - & -\\
