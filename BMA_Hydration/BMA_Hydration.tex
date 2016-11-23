@@ -577,13 +577,11 @@ Additionally, SAMPL4\_047 is listed as the second largest hydration free energy 
 It is thus feasible that the ensemble design process has identified a statistical model that is valid for lighter weight, lower hydration free energy compounds but is not sufficiently accurate for larger compounds with higher free energy values.
 To test this hypothesis, the ensemble design process would need to expand to include more chemical exemplars that are similar to SAMPL4\_024 and SAMPL4\_047. 
 
-\todo{LJG: Get some concrete examples from Nathan}
 This statistical framework has designed a single model for combining two methods in order to estimate hydration free energies for any compound in the SAMPL4 challenge.
-These method constituents are based on two different approaches for predicting hydration free energy: one is based on a multi-conformational implicit methods and requires tens of minutes to make a prediction, where as the other is based on molecular dynamics and requires many hours to make the same prediction. 
-The benefit of this model, is not just in the fact that it provides optimal performance through its estimates.
-Rather, the model defines a \emph{linear relationship} between two very different approaches that can be used to test and refine these individual methods both independently and in-concert of each other.
-In this way the optimal ensemble is not necessarily the end solution, but rather a tool that can help facilitate an iterative design process to help methods  gradually converge and eventually replace the statistical blackbox.
-Additionally, we envision that through this type of framework, groups of computationally less expensive methods may be able to outperform and replace more expensive methods.
+These method constituents are based on two different approaches for predicting hydration free energy: one is based on a multi-conformational implicit method and requires tens of minutes to make a prediction, where as the other is based on molecular dynamics and requires many hours to make the same prediction. 
+One benefit of this approach therefore is not only in improving estimation accuracy, but in providing this increase in accuracy by combining computationally expensive methods with cheaper methods.
+We envision that through this type of framework, specific ensembles of methods will be able to be developed for different classes of chemical compounds.
+In this way, a stratification of the chemical landscape (e.g., based on MW, functionality and polarization, etc.) is possible where specific classes of  compounds are mapped to distinct ensembles, and these ensembles are able to provide the best estimates for hydration free energies at the lowest possible computational cost.
 
 
 \subsection{Performance analysis of alternate ensemble techniques}
@@ -696,10 +694,11 @@ Finally, in comparison to stepwise regression via forward selection, BMA reduces
 \section{Conclusions}
 This study demonstrates a proof-of-principle application of how to statistically design and aggregate an ensemble of methods for estimating solvation free energies in small molecules.
 While the performance of BMA is expected to generalize to a much broader set of small molecule estimation problems, the specific BMA model trained in this study is likely to be dependent on the small molecules used in the SAMPL4 challenge.
-Specifically, in drug discovery there tends to be a significant difference between randomly partitioning the data between training and validation sets (as was done in this work) and partitioning it in some other way: e.g., by molecule size, by discovery date, by polarity, etc. 
-In future work we will investigate the application of this method to specific classes of small molecules to explore the limitations of aggregating methods selected as optimal on one class of compounds for a second, significantly different set of compounds.
-Additionally, the BMA approach is purely statistical in nature, but we are working on modifying the aggregation process to leverage structural and environmental features (e.g., only look at ensembles of empirical methods for certain structural features and consider all methods for other structures).
-Finally, we will are looking at penalizing computationally expensive methods that provide minimal accuracy benefits to optimize both the accuracy of the estimates and the efficiency of the calculation.
+
+In future work we will investigate the application of this method to broader chemical classes.
+Specifically, we envision that this type of framework can help stratify the small molecule chemical landscape based on chemical classes defined by molecular weight, functionality and polarization, available surface area, etc.
+This stratification will map specific classes of compounds to distinct ensembles that provide the best estimates for hydration free energies at the lowest possible computational cost.
+Towards this task, we are looking at penalizing computationally expensive methods that provide minimal accuracy benefits to optimize both the accuracy of the estimates and the efficiency of the calculation.
 
 \subsection*{Acknowledgments}
 This research was funded by NIH grant R01 GM069702 to Nathan Baker.
