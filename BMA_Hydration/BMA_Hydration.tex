@@ -19,6 +19,7 @@
 \renewcommand\thetable{\Roman{table}}
 
 \newcommand{\todo}[1]{\textbf{$\star \star$ {#1} $\star \star$}}
+\newcommand{\rev}[1]{\textsf{\textcolor{red}{#1}}}
 \usepackage[margin=10pt,font=small,labelfont=bf]{caption}
 
 \title{Bayesian Model Averaging for Ensemble-Based Estimates of Solvation Free Energies}
@@ -43,61 +44,60 @@
 
 \begin{abstract}
 	This paper applies the Bayesian Model Averaging (BMA) statistical ensemble technique to estimate small molecule solvation free energies.  
-	There is a wide range of methods available for predicting solvation free energies, ranging from empirical statistical models to {\it ab initio} quantum mechanical approaches.
+	There is a wide range \rev{of} methods \rev{available} for predicting solvation free energies, ranging from empirical statistical models to {\it ab initio} quantum mechanical approaches.
 	Each of these methods is based on a set of conceptual assumptions that can affect a method's predictive accuracy and transferability.
-	Using an iterative statistical process, we have selected and combined solvation energy estimates using an ensemble of 17 diverse methods from the Statistical Assessment of Modeling of Proteins and Ligands (SAMPL) SAMPL4 blind prediction study to form a single, aggregated solvation energy estimate. 
+	Using an iterative statistical process, we have selected and combined solvation energy estimates using an ensemble of 17 diverse methods from the \rev{Statistical Assessment of Modeling of Proteins and Ligands (SAMPL)} SAMPL4 blind prediction study to form a single, aggregated solvation energy estimate. 
 	The ensemble design process evaluates the statistical information in each individual method as well as the performance of the aggregate estimate obtained from the ensemble as a whole.
 	Methods that possess minimal or redundant information are pruned from the ensemble and the evaluation process repeats until aggregate predictive performance can no longer be improved.
 	We show that this process results in a final aggregate estimate that outperforms all individual methods by reducing estimate errors by as much as 91\% to $1.2$ kcal mol$^{-1}$ accuracy.
 	We also compare our iterative refinement approach to other statistical ensemble approaches and demonstrate that this iterative process reduces estimate errors by as much as 61\%. 
-	This work provides a new approach for accurate solvation free energy prediction and lays the foundation for future work on aggregate models that can balance computational cost with estimation accuracy.
+	This work provides a new approach for accurate solvation free energy prediction and lays the foundation for future work on aggregate models that can balance computational cost with \rev{prediction} accuracy.
 \end{abstract}
 
 
 \section{Introduction} \label{Introduction}
 Accurate calculation of solvent-solute interactions is an important component of robust molecular simulation including protein structure prediction \cite{Levy:03,Robinson:99, Rakhmanov:07}, conformational ensemble calculations \cite{Jorgensen:2004, Cui:2002, Ashbaugh:99,Ashbaugh:2002}, and binding free energy calculations \cite{Yang:2009, Whalen:2013, Mobley:2009}.
-Solvation free energy methods for atomically detailed molecular models have a long history of development \cite{Eisenberg:1986, Kang:1987:1, Kang:1987:2, Kang:1987:3,Kang:1987:4, Tan:2006, Gallicchio:2002,Baker:2013,Baker:2015} and have recently benefited from the curation of experimental small molecule solvation data for blind prediction challenges such as the Statistical Assessment of Modeling of Proteins and Ligands (SAMPL) challenge studies \cite{Nicholls:2008, Mobley:2009b, Klimovich:2010, Mobley:2009, Geballe:2012, Geballe:2010, Mobley:2014}.
-By presenting a larger range of solvation free energies and molecular weights than seen in common public datasets, these challenges are helping to advance the development of solvation methods,  enabling them to become more robust and accurate in their estimates for a variety of molecular targets~\cite{Ellingson:2014,Muddana:2014,Fu:2014}.  
+Solvation \rev{free} energy methods for atomically detailed molecular models have a long history of development \cite{Eisenberg:1986, Kang:1987:1, Kang:1987:2, Kang:1987:3,Kang:1987:4, Tan:2006, Gallicchio:2002,Baker:2013,Baker:2015} and have recently benefited from the curation of experimental small molecule solvation data for blind prediction challenges such as the Statistical Assessment of Modeling of Proteins and Ligands (SAMPL) challenge studies \cite{Nicholls:2008, Mobley:2009b, Klimovich:2010, Mobley:2009, Geballe:2012, Geballe:2010, Mobley:2014}.
+By presenting a larger range of solvation free energies and molecular weights than seen in common public \rev{datasets}, these challenges are helping to advance the development of solvation methods, \rev{making their estimates more accurate and robust} for a variety of molecular targets~\cite{Ellingson:2014,Muddana:2014,Fu:2014}.  
 
 Consistent across many of these challenge studies is the observation that the top-performing methods typically come from a wide range of different strategies \cite{Nicholls:2008, Mobley:2009b, Mobley:2009, Mobley:2014}.
 Across different challenges, top performers have included explicit solvation methods \cite{Klimovich:2010, Levy:1998, Mobley:2009c}, implicit solvation methods \cite{Mennucci:2007,Jorgensen:2004}, and hybrid methods that combine mixed quantum mechanics (QM) with molecular mechanical (MM) approaches \cite{Konig:2014, Kamerlin:2009}.
 In this context, there is a significant degree of uncertainty associated with how to best select, specify, and evaluate the set of parameters and mathematical systems needed to accurately estimate solvation free energies: e.g., uncertainties due to hydrophobicity \cite{Ashbaugh:1999}, surface effects \cite{Chorny:05}, and solvent asymmetries \cite{Mobley:08}.  This type of \emph{method selection uncertainty} affects a wide range of scientific and mathematical disciplines and is arguably the greatest source of error and risk associated with estimation tasks \cite{Rojas:2010, Apostolakis:1990, Devooght:1998, Neuman:2003}.
 One of the most powerful ways to address this uncertainty is by combining an ensemble of varied methods (e.g., through a weighted average) to form a single aggregated estimate \cite{Bates:1969, Opitz:1999, Rokach:2010, Hoeting:1999}.
 The motivation behind ensemble approaches is based on two principles: (1) most methods in the ensemble possess some unique, useful information; and (2) no single method is sufficient to account for all uncertainties.
-When modeled correctly, the information and strengths of individual methods can be combined, and their corresponding weaknesses and biases can be overcome by the strength of the group~\cite{Seni:2010, Hoeting:1999,Raftery:1998,Raftery:1995}. 
+When modeled correctly, the information and strengths of individual methods can be combined, and their corresponding weaknesses and biases can be overcome by the strength of the \rev{group}~\cite{Seni:2010, Hoeting:1999,Raftery:1998,Raftery:1995}. 
 Ensemble-based estimates are therefore expected to be more reliable and accurate than individual methods, an expectation that has been upheld in numerous examples \cite{Gosink:2014, Zhang:2003, Bates:1969, Morales-Casique:2010, Opitz:1999, Rokach:2010, Hoeting:1999, Seni:2010, Raftery:2005, Vlachopoulo:2013, Seni:2010, Hoeting:1999, Raftery:1998, Raftery:1995}.
-Throughout this paper, we use the term ``method'' to refer to a specific method (and associated set of parameters, settings, etc.) used to estimate solvation free energies, and the term `model' to refer to some approach for estimating solvation free energies that could be a weighted combination of estimates from one or more methods.
+\rev{Throughout this paper, we use the term ``method'' to refer to a specific method (and associated set of parameters, settings, etc.) used to estimate solvation free energies, and the term `model' to refer to some approach for estimating solvation free energies that could be a weighted combination of estimates from one or more methods.}
 
 This paper demonstrates the ability of an ensemble approach called Bayesian Model Averaging (BMA) \cite{Hoeting:1999} to estimate solvation free energies for 45 small molecules by combining predictions from 17 diverse methods provided by the SAMPL4 challenge dataset \cite{Mobley:2014}.
-Though BMA has been applied successfully for prediction tasks in many other domains \cite{Ye:2004, Vlachopoulo:2013, Raftery:2005, Morales-Casique:2010, Gosink:2014} this is the first application of the BMA approach to solvation energy prediction.
+Though BMA has been applied successfully for prediction tasks in many other domains \cite{Ye:2004, Vlachopoulo:2013, Raftery:2005, Morales-Casique:2010, Gosink:2014} this is the first application of the BMA approach \rev{to} solvation energy prediction.
 
 \section{Methods} \label{MethodMain}
-This work provides a framework for addressing the uncertainties associated with estimating  small molecule hydration free energies. 
+\rev{This work provides a framework for addressing the uncertainties associated with estimating  small molecule hydration free energies. 
 Throughout this paper, we use the term ``methods'' to describe the individual approaches used to calculate solvation free energies and the term ``models'' to describe statistical ensembles of method predictions.  
-We also define the term optimality, or optimal performance, as a forecasting method that provides the best \emph{overall} performance based on a variety of predictive targets: e.g., targets randomly selected through cross-validation experiments.
+We also define the term optimality, or optimal performance, as a forecasting method that provides the best \emph{overall} performance based on a variety of predictive targets: e.g., targets randomly selected through cross-validation experiments.}
 
-Additionally, there are two types of ensembles that we consider in this work.
+\rev{Additionally, there are two types of ensembles that we consider in this work.
 In the simplest case, we examine unique combinations of methods for estimating solvation free energy.
 These ensembles of methods are aggregated via a single statistical model to construct an aggregated estimate. 
 In the next level of ensembles, we examine multiple such statistical models; i.e. an ensemble of models. 
 The framework's objective is to identify the best statistical models, that are in turn based on the best combination of methods.
 Through Bayesian Model Averaging, we construct and aggregate an ensemble of ensembles (i.e., multiple statistical models that uniquely define multiple methods) to create a final aggregated model.
-This approach and ensemble in general have been shown to provide more accurate and reliable estimates based on numerous examples~\cite{Gosink:2014, Zhang:2003, Bates:1969, Morales-Casique:2010, Opitz:1999, Rokach:2010, Hoeting:1999, Seni:2010, Raftery:2005, Vlachopoulo:2013, Seni:2010, Hoeting:1999, Raftery:1998, Raftery:1995}.
+This approach and ensemble in general have been shown to provide more accurate and reliable estimates based on numerous examples~\cite{Gosink:2014, Zhang:2003, Bates:1969, Morales-Casique:2010, Opitz:1999, Rokach:2010, Hoeting:1999, Seni:2010, Raftery:2005, Vlachopoulo:2013, Seni:2010, Hoeting:1999, Raftery:1998, Raftery:1995}.}
 
-At a high level, the framework begins by first evaluating all methods collectively as an ensemble and uses the ensemble to make an aggregated estimate. 
+\rev{At a high level, the framework begins by first evaluating all methods collectively as an ensemble and uses the ensemble to make an aggregated estimate. 
 The framework then begins an iterative process of ensemble pruning, analyzing, and estimating.
 The pruning process itself is based on a comprehensive analysis of statistical models that collectively assess the information content of each method.
 During any given iteration, this process prunes the most redundant or least-accurate methods from the ensemble.
 After pruning, performance for the new ensemble is assessed and monitored through a set of cross-validation studies.
 The process repeats until all methods have been pruned.
-The ensemble that provides the best overall performance is defined as optimal and is the ensemble that is best used for future estimation tasks (e.g., for future SAMPL challenges).
+The ensemble that provides the best overall performance is defined as optimal and is the ensemble that is best used for future estimation tasks (e.g., for future SAMPL challenges).}
 
-While improved estimates are certainly an important objective for this framework, we are equally interested in providing a better interpretation of the statistical ``black box'' behind these aggregated estimates. 
+\rev{While improved estimates are certainly an important objective for this framework, we are equally interested in providing a better interpretation of the statistical ``black box'' behind these aggregated estimates. 
 Specifically, if an aggregate estimate proves to be more accurate than individual methods, it is imperative to understand how the aggregate's methods were combined so that domain knowledge may be obtained from the statistical aggregation process.
-Towards this objective, this framework provides quantitative information to characterize the optimal ensemble.  
-For example, to help determine if the ensemble relied solely on implicit or explicit methods, or if it used variety of different methods.
-To better understand which methods contributed the most useful information in the aggregate estimate.
-Alternatively, if the ensemble is largely composed of one type of method, to better understand the subtle difference in the implementation of these methods (e.g., variations in small molecule force fields)? 
+Towards this objective, this framework provides quantitative information to characterize the optimal ensemble; e.g., with such as the following example questions.  Did the ensemble relied solely on implicit or explicit methods, or if it used variety of different methods?
+Which methods contributed the most useful information in the aggregate estimate?
+Alternatively, if the ensemble is largely composed of one type of method, how do variations in parameters influence the results?}
 
 
 \subsection{Model specification with Bayesian Model Averaging (BMA)} \label{Method} 
@@ -110,13 +110,13 @@ Given $P$ solvation methods, the combination of all $x_{ij}$ forms the numerical
 	\label{Method:E1}
 	y_i = \sum_{j=1}^P x_{ij} \;\beta_j + \epsilon_i
 \end{equation}
-Here, the parameter vector $\beta_j$ defines the unknown relationship between the ensemble's $P$ constituents and $\epsilon_i$ is the disturbance term that captures all factors that influence the dependent variable $y_i$ \emph{other} than the regressors $x_{ij}$.
+\rev{Here, the parameter vector $\beta_j$ defines the unknown relationship between the ensemble's $P$ constituents and $\epsilon_i$ is the disturbance term that captures all factors that influence the dependent variable $y_i$ \emph{other} than the regressors $x_{ij}$.
 Such factors include latent variables impacting the response $y_i$, nonlinearity effects, and measurement errors associated with quantifying $y_i$, as well as stochastic, experimental effects that impact the ability to reproduce $y_i$.  
 Explicitly solving for the disturbance term is not feasible: $\epsilon_i$ is a theoretical, non-observable random term that must be estimated through an analysis of model residuals.  
-Fortunately, if the distribution of $\epsilon_i: i=1,\ldots,N$ is normal (i.e., $\epsilon \sim \mathcal{N}(0,\sigma)$) the total disturbance term's contribution to the model's estimate goes to zero as the expectation of random variables with such distributions is $E [\epsilon | X]\ = 0$.
+Fortunately, if the distribution of $\epsilon_i: i=1,\ldots,N$ is normal (i.e., $\epsilon \sim \mathcal{N}(0,\sigma)$) the total disturbance term's contribution to the model's estimate goes to zero as the expectation of random variables with such distributions is $E [\epsilon | X]\ = 0$.}
 
-Under this assumption of normality, the objective in evaluating Equation~\ref{Method:E1} is to estimate the values $\beta_j$ that will both fit the known hydration free energy data in $y_i$ and facilitate the ability to make inferences on the hydration free energy of unknown molecules.  
-Many different regression techniques can estimate $\beta_j$ \cite{Hosmer:1989,Reiss:2012,Mallows:1973,Candes:2007}; however, these techniques commonly generate estimates that vary in their ability to model and infer \cite{Genell:2010,Hoeting:1999,Davidson:2006,Raftery:1995,Raftery:1998}.  
+\rev{Under this assumption of normality, the objective in evaluating Equation~\ref{Method:E1} is to estimate the values $\beta_j$ that will both fit the known hydration free energy data in $y_i$ and facilitate the ability to make inferences on the hydration free energy of unknown molecules.  
+Many different regression techniques can estimate $\beta_j$ \cite{Hosmer:1989,Reiss:2012,Mallows:1973,Candes:2007}; however, these techniques commonly generate estimates that vary in their ability to model and infer \cite{Genell:2010,Hoeting:1999,Davidson:2006,Raftery:1995,Raftery:1998}.}
 
 BMA addresses the challenge of statistical model uncertainty by first evaluating all $2^{P}-1$ possible statistical models that can be formed from the $P$ estimation methods and combining each model's $\beta_j$ through a weighted average into an aggregated parameter vector, $\beta_j^{\text{BMA}}$ (Equation~\ref{Method:E2}).
 There are $k = 1, \ldots, 2^P-1$ distinct combinations of the $P$ estimation methods, each with a corresponding statistical model, $M^{(k)}$, and parameter vector, $\beta^{(k)}_j$. 
@@ -135,13 +135,13 @@ where $B^{(k)}$ is the Bayesian Information Criteria for model $M^{(k)}$ estimat
 \begin{equation} \label{Method:E4} 
 	B^{(k)} \approx N \log{(1-R^{2(k)})} + p^{(k)} \log{N}.
 \end{equation}
-The Bayesian Information Criteria (BIC) is a method for ranking models based on the model's goodness of fit, $R^2$.
-The $R^2$ is a statistical measure of how close the data are to the fitted regression line.
-It is basically the percentage of the response variable variation that is explained by a linear mode.
 
+\rev{The Bayesian Information Criteria (BIC) is a method for ranking models based on the model's goodness of fit, $R^2$.
+The $R^2$ is a statistical measure of how close the data are to the fitted regression line.
+It is essentially the percentage of the response variable variation that is explained by a linear mode.
 In contrast to other information criteria, the BIC strongly penalizes models for having too many parameters. 
 In essence, the BIC strikes a parsimonious balance between sufficient complexity for a model to be useful, but not so complex as to be overfitting. 
-In Equation~\ref{Method:E4},  $R^{2(k)}$ is this adjusted $R^2$ for model $M^{(k)}$ that indicates the model's goodness of fit for the observations, $p^{(k)}$ is the number of methods used by the model (not including the intercept), and $N$ is the number of solvation free energy values to be predicted (i.e., the number of molecules). 
+In Equation~\ref{Method:E4},  $R^{2(k)}$ is this adjusted $R^2$ for model $M^{(k)}$ that indicates the model's goodness of fit for the observations, $p^{(k)}$ is the number of methods used by the model (not including the intercept), and $N$ is the number of solvation free energy values to be predicted (i.e., the number of molecules).}
 
 The parameter vector $\beta_j^{\text{BMA}}$ obtained from Equation~\ref{Method:E2} helps to address model uncertainty by accounting for all systems of linear equations that can model the relationship between the measured solvation free energy values $y_i$ and values $x_{ij}$ predicted by each solvation method $j$.
 Over-fitting by more complicated models is addressed through the Bayes information criterion, which penalizes models with more variables (i.e., statistical models that use more methods in their regression).
