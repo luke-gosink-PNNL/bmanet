@@ -1,0 +1,146 @@
+library(ggplot2)
+library(dplyr)
+library(reshape2)
+
+#--------- Read in drug data and BMA Stage 16-------------#
+drug_data <- read.csv("BMA_Xval_Stage_16_Preds.tsv", sep = "\t")
+t_data <- read.csv("BMA_Xval_Stage_01_Preds.tsv", sep = "\t")
+to_merge <- data.frame(SAMPL4_ID = t_data$SAMPL_ID, X566.geballe = t_data$X566.geballe, X548.jiafu = t_data$X548.jiafu)
+
+#------ Keep distinct estimators ---------#
+to_merge <- distinct(t_data, SAMPL_ID, .keep_all = TRUE) %>% group_by(SAMPL_ID) %>% rename(SAMPL4_ID = SAMPL_ID) %>%
+  select(-BMA_Mean, -BMA_SD)
+rownames(to_merge) <- to_merge$SAMPL4_ID 
+drug_data <- rename(drug_data, SAMPL4_ID = SAMPL_ID)
+
+#-------- Merge estimators and BMA -------#
+test <- merge(drug_data[,1:4], to_merge, by = "SAMPL4_ID", all = TRUE)
+
+#------- Create a phantom estimator of the best rmse -------------#
+winner <- list()
+for (i in 1:length(t_data$SAMPL_ID)) {
+  winner[i] <- t_data[i, which.min(sqrt((t_data[i,5:21]-t_data$Exp_Val[i])^2))+4]
+}
+test$winner <- unlist(winner)
+
+#--------- Calculate RMSE --------------#
+getRMSE <- function(pred, truth){
+  return(truth - pred)
+}
+
+unsplit_drug_data <- group_by(test, SAMPL4_ID) %>%
+  mutate(bma = sqrt((BMA_Mean - Exp_Val)^2), alc.3 = getRMSE(X544.gilsonlab, Exp_Val), imp.8 = getRMSE(X566.geballe,Exp_Val),
+                                              imp.2 = getRMSE(X145.lhs.sampl4, Exp_Val), exp.3 = getRMSE(X548.jiafu, Exp_Val), best = getRMSE(winner, Exp_Val)) %>%
+  summarise(bma_se = sd(bma)/10, bma = mean(bma), alc.3 = first(alc.3), imp.8 = first(imp.8), imp.2 = first(imp.2), exp.3 = first(exp.3), best = first(best))
+
+#-------- split the data in half ---------#
+
+drug_data_split_1 <- unsplit_drug_data[1:23, ] 
+drug_data_split_1$SAMPL4_ID <- droplevels(drug_data_split_1$SAMPL4_ID)
+drug_data_split_2 <- unsplit_drug_data[24:nrow(drug_data), ]
+drug_data_split_2$SAMPL4_ID <- droplevels(drug_data_split_2$SAMPL4_ID)
+
+#------- Melt for ggplot purposes ---------#
+melted <- melt(drug_data_split_1, id.vars = "SAMPL4_ID")
+melted2 <- melt(drug_data_split_2, id.vars = "SAMPL4_ID")
+
+#------------- Split 1 ---------------#
+p <- ggplot(drug_data_split_1)+
+  geom_point(aes(x = as.numeric(SAMPL4_ID), y=bma, group = SAMPL4_ID, fill = "bma"), color = "grey44", size =2.5)+
+  geom_errorbar(aes(x = as.numeric(SAMPL4_ID), position = bma, ymin = bma-1.96*bma_se, ymax = bma+1.96*bma_se), color = "grey44")+
+  coord_flip()+
+  geom_point(data=subset(melted,variable %in% c("alc.3","imp.8","imp.2")), aes(x = as.numeric(SAMPL4_ID) - 0.19, 
+                                                                                       y = value, 
+                                                                                       group = SAMPL4_ID, shape = variable, color = variable),
+             size = 3.5)+
+  guides( shape = guide_legend(""), color = guide_legend(""), fill = guide_legend(title = ""))+
+  theme_bw()+
+  scale_x_reverse(breaks = 1:nlevels(melted$SAMPL4_ID),
+                  labels = levels(melted$SAMPL4_ID))+
+  scale_y_continuous(limits = c(-5,5))+
+  scale_fill_manual(values = "lightsteelblue")+
+  scale_shape_manual(values = c(15,16,17))+
+  scale_color_brewer(palette = "Set1")+
+  theme(panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.major.y = element_blank(),
+        legend.position = "right")
+p <- p + theme(axis.line = element_line(colour="black", size=0.25))
+p <- p + theme(strip.background = element_blank())
+
+p <- p + theme(axis.ticks.x = element_blank())
+p <- p + theme(axis.ticks.y = element_blank())
+p <- p + theme(axis.title.x = element_text(size=16))
+p <- p + theme(axis.title.y = element_text(size=16))
+p <- p + theme(axis.text.x = element_text(size=14))
+p <- p + theme(axis.text.y = element_text(size=14))
+
+p <- p + theme(panel.grid.major.x = element_blank())
+p <- p + theme(panel.grid.minor.x = element_blank())
+p <- p + theme(panel.grid.major.y = element_blank())
+p <- p + theme(panel.grid.minor.y = element_blank())
+
+p <- p + theme(panel.border = element_blank())
+p <- p + theme(axis.line = element_line(colour = "black"))
+
+p <- p + ylab("Error")
+p <- p + theme(axis.title.x = element_text(size = 18))
+
+p <- p + xlab("Sample ID")
+p <- p + theme(axis.title.y = element_text(size = 18))
+p <- p + geom_hline(yintercept = 0)
+p
+ggsave(p, file = "~/Desktop/error_plot_no_best_split_1.png", dpi = 900, height = 11.5, width = 9.5)
+
+
+#---------------- Split 2 ------------------#
+q <- ggplot(drug_data_split_2)+
+  geom_point(aes(x = as.numeric(SAMPL4_ID), y=bma, group = SAMPL4_ID, fill = "bma"), color = "grey44", size =2.5)+
+  geom_errorbar(aes(x = as.numeric(SAMPL4_ID), position = bma, ymin = bma-1.96*bma_se, ymax = bma+1.96*bma_se), color = "grey44")+
+  coord_flip()+
+  #geom_point(data=subset(melted2,variable %in% c("alc.3","imp.8","imp.2","exp.3")), aes(x = as.numeric(SAMPL4_ID) - 0.19, 
+  geom_point(data=subset(melted2,variable %in% c("alc.3","imp.8","imp.2")), aes(x = as.numeric(SAMPL4_ID) - 0.19, 
+                                                                                               y = value, 
+                                                                                               group = SAMPL4_ID, shape = variable, color = variable),
+             size = 3.5)+
+  guides( shape = guide_legend(""), color = guide_legend(""), fill = guide_legend(title = ""))+
+  theme_bw()+
+  scale_x_reverse(breaks = 1:nlevels(melted2$SAMPL4_ID),
+                  labels = levels(melted2$SAMPL4_ID))+
+  scale_y_continuous(limits = c(-3,3))+
+  scale_fill_manual(values = "lightsteelblue")+
+  #scale_shape_manual(values = c(15,16,17,18))+
+  scale_shape_manual(values = c(15,16,17))+
+  scale_color_brewer(palette = "Set1")+
+  theme(panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.major.y = element_blank(),
+        legend.position = "right")+
+  xlab("Sample ID")+
+  ylab("Error")
+q <- q + theme(axis.line = element_line(colour="black", size=0.25))
+q <- q + theme(strip.background = element_blank())
+
+q <- q + theme(axis.ticks.x = element_blank())
+q <- q + theme(axis.ticks.y = element_blank())
+q <- q + theme(axis.title.x = element_text(size=16))
+q <- q + theme(axis.title.y = element_text(size=16))
+q <- q + theme(axis.text.x = element_text(size=14))
+q <- q + theme(axis.text.y = element_text(size=14))
+
+q <- q + theme(panel.grid.major.x = element_blank())
+q <- q + theme(panel.grid.minor.x = element_blank())
+q <- q + theme(panel.grid.major.y = element_blank())
+q <- q + theme(panel.grid.minor.y = element_blank())
+
+q <- q + theme(panel.border = element_blank())
+q <- q + theme(axis.line = element_line(colour = "black"))
+
+q <- q + ylab("Error")
+q <- q + theme(axis.title.x = element_text(size = 18))
+
+q <- q + xlab("Sample ID")
+q <- q + theme(axis.title.y = element_text(size = 18))
+q <- q + geom_hline(yintercept = 0)
+q
+ggsave(q, file = "~/Desktop/tighter_scale_error_plot_no_best_split_2.png", dpi = 900, height = 11.5, width = 9.5)
