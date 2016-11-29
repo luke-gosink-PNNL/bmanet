@@ -144,17 +144,17 @@ In essence, the BIC strikes a parsimonious balance between sufficient complexity
 In Equation~\ref{Method:E4},  $R^{2(k)}$ is this adjusted $R^2$ for model $M^{(k)}$ that indicates the model's goodness of fit for the observations, $p^{(k)}$ is the number of methods used by the model (not including the intercept), and $N$ is the number of solvation free energy values to be predicted (i.e., the number of molecules).}
 
 The parameter vector $\beta_j^{\text{BMA}}$ obtained from Equation~\ref{Method:E2} helps to address model uncertainty by accounting for all systems of linear equations that can model the relationship between the measured solvation free energy values $y_i$ and values $x_{ij}$ predicted by each solvation method $j$.
-Over-fitting by more complicated models is addressed through the Bayes information criterion, which penalizes models with more variables (i.e., statistical models that use more methods in their regression).
+Over-fitting by more complicated models is addressed through the Bayes information criterion, which penalizes models with more variables \rev{(i.e., statistical models that use more methods in their regression)}.
 Perhaps more importantly, $\beta_j^{\text{BMA}}$ can be used to estimate new solvation free energy values for unmeasured molecules by combining new $x_{i j}$ estimates.
 
-\subsection{Pruning models with Occam's window} \label{Method:StatEnsemble}
+\subsection{\rev{Pruning models with Occam's window}} \label{Method:StatEnsemble}
 
 The inclusion of all $2^P-1$ models in Equation~\ref{Method:E2} is not necessarily beneficial for predictive performance.
 While some models provide accurate information that will boost the ensemble's predictive accuracy and robustness, many models will perform quite poorly.
-There are two main reasons for why models provide poor estimates.
+\rev{There are two main reasons for why models provide poor estimates.
 In the first case a model may perform poorly if it omits a method (and resultantly information) that is crucial to estimating $y_i$.
 Conversely, a model may also perform poorly if it includes methods that provide inaccurate information about $y_i$.
-In both cases, whether through the omission of useful information or the adoption of misinformation, the model is referred to as ``misspecified'', i.e., not correctly constructed or defined.
+In both cases, whether through the omission of useful information or the adoption of misinformation, the model is referred to as ``misspecified'', i.e., not correctly constructed or defined.}
 The cumulative effect of these misspecified models, despite the fact that they are down-weighted via low posterior probabilities, can erode the ensemble's overall performance \cite{Qian:2015, Martinez-Munoz:2009, Raftery:1998, Onorante:2014, Madigan:1994, Hoeting:1999, Morales-Casique:2010}.
 Madigan and Raftery~\cite{Madigan:1994} developed the Occam's Window ensemble-pruning approach that eliminates under-performing models based on Bayesian information criteria.
 Occam's Window defines a set of models
@@ -181,36 +181,36 @@ where
 		0,&\text{ otherwise}.
 	\end{cases}
 \end{equation}
-Equation~\ref{Method:E7} sorts and prioritizes the methods based on their utility; i.e., the probability that the coefficient term weighting a method's estimate will \emph{not} be 0.
+Equation~\ref{Method:E7} \rev{sorts and prioritizes} the methods based on their utility; i.e., the probability that the coefficient term weighting a method's estimate will \emph{not} be 0.
 The combination of Equations~\ref{Method:E6} and ~\ref{Method:E7} therefore provide a statistical framework to support an iterative, statistical process for designing an ensemble that will provide the best combination of models and methods for estimating solvation free energy.
 
 
 
- \subsection{Statistical design of method ensembles}
+ \subsection{\rev{Statistical design of method ensembles}}
  \label{Method:StatEnsemble:Design}
-At a summary level the statistical design process, shown in Algorithms~\ref{Method:Alg1} and~\ref{Method:Alg2}, proceeds in two iterative stages. 
+\rev{The statistical design process, shown in Algorithms~\ref{Method:Alg1} and~\ref{Method:Alg2}, proceeds in two iterative stages. 
 In both algorithms, we denote matrix and vectors with bold script and indicate row and column dimensions in superscript.
 For example, $\textbf{x}^{n \times p}$ is a matrix with $n$ rows and $p$ columns, where as $x$ is a scalar, or real value.
-Additionally,  $\textbf{0}^{n \times p}$ is a zero matrix and  $\textbf{x}^{1 \times p}$ is a zero vector; essentially, a matrix and vector of the specified dimensions where all values are 0.
- 
- The first stage, presented in Algorithm~\ref{Method:Alg2}, is the analysis stage and its function is to evaluate the statistical significance of each method in the current version of the ensemble via Equation~\ref{Method:E7}.
+Additionally,  $\textbf{0}^{n \times p}$ is a zero matrix and  $\textbf{x}^{1 \times p}$ is a zero vector; essentially, a matrix and vector of the specified dimensions where all values are 0.}
+
+\rev{The first stage, presented in Algorithm~\ref{Method:Alg2}, is the analysis stage and its function is to evaluate the statistical significance of each method in the current version of the ensemble via Equation~\ref{Method:E7}.
 This information is based on a set of 2-fold cross-validation tests that randomly create training and validation datasets from the small molecule compounds  in the SAMPL4 challenge.
 In these tests, each method's statistical information is thus evaluated against a variety of random training and validation sets.
-The results of this first stage are then sent to stage two (Algorithm~\ref{Method:Alg1}): the ensemble pruning stage.
+The results of this first stage are then sent to stage two (Algorithm~\ref{Method:Alg1}): the ensemble pruning stage.}
 
-The second stage evaluates the performance of the current ensemble and then prunes this ensemble by removing that method with the least statistical significance.
+\rev{The second stage evaluates the performance of the current ensemble and then prunes this ensemble by removing that method with the least statistical significance.
 The process then repeats using the new, pruned ensemble.
-By monitoring the performance of each ensemble across the pruning process, the ideal set of methods is able to be identified.
+By monitoring the performance of each ensemble across the pruning process, the ideal set of methods is able to be identified.}
 
-At a more detailed level, the design process assumes an initial set of $n$ estimates made by $p$ methods, $\textbf{x}^{n \times p}$ for observations, $\textbf{y}^{n \times 1}$.
+\rev{At a more detailed level, the design process assumes an initial set of $n$ estimates made by $p$ methods, $\textbf{x}^{n \times p}$ for observations, $\textbf{y}^{n \times 1}$.
 The second and third lines initialize the root mean squared error (RMSE) and the solution for the best ensemble of models and methods.
-The algorithm will iterate over the following tasks while the algorithm still has more than two methods to evaluate (line 5 - line 19).
+The algorithm will iterate over the following tasks while it still has more than two methods to evaluate (line 5 - line 19).}
 
 \begin{table}[t] 
 	\begin{minipage}[t]{0.45\linewidth}\centering 
 		\begin{algorithm}[H] 
 			\footnotesize 
-			\caption{\newline Prune and Design Ensemble} \label{Method:Alg1} 
+			\caption{\newline \rev{Prune and Design Ensemble}} \label{Method:Alg1} 
 			\begin{algorithmic}[1] 
 				{\scriptsize 
 				\REQUIRE \textbf{vector} $\textbf{y}^{n \times 1}$, \textbf{matrix} $\textbf{x}^{n \times p}$\; 
@@ -244,7 +244,7 @@ The algorithm will iterate over the following tasks while the algorithm still ha
 		\centering
 		\begin{algorithm}[H] 
 			\footnotesize 
-			\caption{\newline Analyze Methods} \label{Method:Alg2} 
+			\caption{\newline \rev{Analyze Methods}} \label{Method:Alg2} 
 			\begin{algorithmic}[1] 
 				{\scriptsize 
 				\REQUIRE  \textbf{vector} $\textbf{y}^{n \times 1}$, \textbf{matrix} $\textbf{m}^{n \times j}: j \leq p$\; 
@@ -268,21 +268,22 @@ The algorithm will iterate over the following tasks while the algorithm still ha
 \end{table}
 
 First, the performance of the current ensemble is evaluated through \emph{Analyze Methods} (line 6).
-The \emph{Analyze Methods} function, shown in Algorithm \ref{Method:Alg2}, takes as input the same observation data, \textbf{y}, as Algorithm \ref{Method:Alg1}, as well as a matrix,  $\textbf{m}^{n \times j}$, that contains estimates made by a subset of $j \leq p$ methods; here $\textbf{m}^{n \times j}$ represents the current set of methods from $\textbf{x}^{n \times p}$ still being analyzed.
+\rev{The \emph{Analyze Methods} function in Algorithm \ref{Method:Alg2} takes as input the same observation data $\textbf{y}$ as Algorithm \ref{Method:Alg1} as well as a matrix  $\textbf{m}^{n \times j}$ that contains estimates made by a subset of $j \leq p$ methods.
+The matrix $\textbf{m}^{n \times j}$ represents the current set of methods from $\textbf{x}^{n \times p}$ still being analyzed.}
 Algorithm \ref{Method:Alg2} performs 100 iterations of a 2-fold cross-validation and begins by partitioning the estimate matrix $\mathbf{m}$ equally into training and validation data (line 6).
 Using the training data, the algorithm uses Equation~\ref{Method:E6} to estimate $\beta_{BMA}$ and then calculates the RMSE of this coefficient vector based on the validation data (lines 7 and 8).
 Next, the $\mathrm{Pr}(\beta_j^{\text{BMA}}\neq 0)$ of each method are calculated and saved in the vector, \textbf{v} (line 9).
-After 100 iterations, the function returns an estimate for $\beta_j^{\text{BMA}}$, the mean RMSE of the current ensemble, as well as a list of all methods and their corresponding probability values for $\mathrm{Pr}(\beta_j^{\text{BMA}}\neq 0)$. 
+\rev{After 100 iterations, the function returns an estimate for $\beta_j^{\text{BMA}}$, the mean RMSE of the current ensemble, as well as a list of all methods and their corresponding probability values for $\mathrm{Pr}(\beta_j^{\text{BMA}}\neq 0)$.}
 Next, Algorithm \ref{Method:Alg1} compares and conditionally updates the current ``best'' performing model, \textbf{x\_solution}, with the model returned by \emph{Analyze Methods} (lines 8 and 9).
 The algorithm then identifies the method with the lowest $\mathrm{Pr} (\beta_j^{\text{BMA}}\neq 0)$ and removes this method from the current model (line 17). With this method removed, the process repeats until there are just two methods left.
 The output of this process is an ensemble of methods, $\textbf{x}_{ij}$ that are statistically determined to be the best methods for estimating the observations in $\mathbf{y}$ and a statistical model, $\beta_{BMA}$ that specifies how to best combine these methods.  
 
 \subsection{Solvation free energy data and solvation methods} \label{EP:DataModels}
 The SAMPL4 challenge consists of 49 submissions representing a total of 19 different research groups \cite{Mobley:2014}.
-Each of these methods provides solvation free energy estimates for 45 small molecule compounds.\footnote{The original SAMPL4 study used 52 samples; thus some samples have labels like SAMPL4\_052. However, several compounds were removed during the course of the study based on ``problems with experimental values, SMILES strings, or structures for a number of compounds, resulting in removal of some compounds from the challenge.''\cite{Mobley:2014}}
+Each of these methods provides solvation free energy estimates for 45 small molecule compounds.\footnote{\rev{The original SAMPL4 study used 52 samples; thus some samples have labels like SAMPL4\_052. However, several compounds were removed during the course of the study based on ``problems with experimental values, SMILES strings, or structures for a number of compounds, resulting in removal of some compounds from the challenge.''\cite{Mobley:2014}}}
 The challenge is blind in the sense that the solvation free energy values for these molecules were hidden from participants; e.g., free energy values are not found in standard solvation free energy test sets, and their values are not readily available in the literature \cite{Guthrie:2014}. 
 In this work, we restrict our analysis to a subset of 17 method submissions based on the fact that many groups made multiple submissions that were strongly correlated.
-In these cases, we chose only a single variant to ensure that multicollinearity did not inflate the significance of specific methods during model selection and averaging; such bias can create unstable estimates for $\beta^{BMA}_j$ and that in turn can reduce BMA's estimate accuracy \cite{Clyde:1999}.
+In these cases, we chose only a single variant to ensure that multicollinearity did not inflate the significance of specific methods during model selection and averaging; such bias can create unstable estimates for $\beta^{BMA}_j$ and that \rev{in turn} can reduce BMA's \rev{estimate} accuracy \cite{Clyde:1999}.
 These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the methods used to calculate the solvation energy: 
 \begin{itemize} 
 	\item \textbf{Group 1:} Single-conformation implicit solvent methods \cite{Ellingson:2014, Nicholl:2010, Hawkins} based on Poisson-Boltzmann and related methods \cite{Fixman:1979, Honig:1995, Davis:1990};
@@ -295,7 +296,7 @@ These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the
 	\centering
 	\caption[Ensemble Constituents]{This table lists the solvation methods used in our ensemble design process.
 	Method ID indicates the identification number of the method that is referenced throughout this paper.
-	CPU time is the reported time to make a prediction.
+	\rev{CPU time is an order-of-magnitude estimate of the method's reported time to make a prediction.}
 	Sampling strategies include quantum mechanical (QM), molecular dynamics (MD), and molecular mechanics with Poisson-Boltzmann surface area solvation (MM-PBSA).
 	The listed performance is based on 100 iterations of a 2-fold cross-validation study as described in the text.
 	This performance is also shown graphically in Figure~\ref{Analysis:Figure1:Methods}.
@@ -304,6 +305,7 @@ These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the
 	The final BMA ensemble is indicated by the two italicized methods: imp-2 and alc-3.
 	Wilcoxon based $p$-values for BMA's mean RMSE distribution vs.\@ the best method's mean RMSE distribution (imp-2) are shown in Table~\ref{Analysis:Table2:BMA}.}
 	\scriptsize
+	\rev{
 	\begin{tabular}{l|r|c|c|c|c}
 		\hline
 		\hline
@@ -331,6 +333,7 @@ These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the
 		\textbf{BMA (Stage 16)} & \textbf{NA} & seconds & \textbf{ensemble} & \textbf{0.82} $\pm$ \textbf{0.015} & \textbf{0} \\
 		\hline
 	\end{tabular}
+}
 	\label{Analysis:Table1:Methods}
 \end{table}
 %%%
@@ -338,58 +341,58 @@ These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the
 	\centering
 	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/Rev2/RMSE_SE}
 	\caption{
-	This figure depicts the mean root mean squared error (RMSE) for the 17 initial methods used in our ensemble design process.
-	Additionally, the 95 \% confidence interval (based on standard error) for the expected mean RMSE is shown for each method. 
-	Thus at 95\% statistical confidence, the true expected performance for each method is depicted according to the 100 iterations of the 2-fold cross-validation experiment we detail in Algorithm 2.}
+	This figure uses a squadron of Imperial Tie Fighters to depict the mean root mean squared error \rev{(RMSE)} for the 17 initial methods used in our ensemble design process.
+	\rev{Additionally, the 95 \% confidence interval (based on standard error) for the expected mean RMSE is shown for each method.
+	Thus at 95\% statistical confidence, the true expected performance for each method is depicted according to the 100 iterations of the 2-fold cross-validation experiment we detail in Algorithm 2.}}
 	\label{Analysis:Figure1:Methods}
 \end{figure}
 %%%
  
- \subsection{Training, estimating, and pruning an ensemble with BMA} \label{EP:training}
+ \subsection{\rev{Training, estimating, and pruning an ensemble with BMA}} \label{EP:training}
 From this initial set of 17 methods, we iteratively assessed and pruned methods as described in Algorithm \ref{Method:Alg1}.
 The approach began by randomly sampling (without replacement) 26 of the original 52 experimental solvation free energy measurements to form training and validation datasets (Algorithm \ref{Method:Alg2}, line 6).
 Collectively, these sampled values formed the observation vector $y_i$ and the estimates from each of the prediction methods in Table~\ref{Analysis:Table1:Methods} for these measurements defined the ensemble estimate matrix, $x_{i j}$.
 The observation vector and the ensemble estimate matrix were used to form the linear system in Equation~\ref{Method:E1}.  
 
 Next, we estimated the $\beta_j^{\text{BMA}}$ parameter from Equation~\ref{Method:E2} by assessing all possible ($2^{17} -1$) statistical models $M^{(k)}$.
-Each model's information criteria $B^{(k)}$ was used to identify a reduced set of the most informative models per Equation~\ref{Method:E5}.
+Each model's information criteria $B^{(k)}$ was used to identify a reduced set of \rev{the} most informative models per Equation~\ref{Method:E5}.
 Based on this reduced modeling space, the coefficient terms $\beta_j^{\text{BMA}}$ were estimated through weighted averages of each statistical model's ordinary least squares solution (Equation~\ref{Method:E6}).
 We used $\beta_j^{\text{BMA}}$ to estimate the remaining 26 solvation free energy measurements that were \emph{not} used to train the BMA model.
 This task was accomplished by combining the estimates of all methods in Table~\ref{Analysis:Table1:Methods} for the validation data with $\beta_j^{\text{BMA}}$ to produce an aggregated estimate. 
-An RMSE was obtained for the 26 estimates made on validation data.
+An \rev{RMSE} was obtained for the 26 estimates made on validation data.
 
-This process was repeated 100 times (Algorithm \ref{Method:Alg2}) so that performance for any estimation method could be reported as a mean RMSE: i.e., the mean of 100 RMSEs that each represent performance for a 2-fold cross-validation using the 26 member validation sets described above.
+This process was repeated 100 times (Algorithm \ref{Method:Alg2}) so that performance for any estimation method could be reported as a mean RMSE: i.e., the mean of 100 RMSEs that each represent performance for a 2-fold cross-validation using the 26 member validation \rev{sets} described above.
 In addition to the mean RMSE, the information content provided by each method in the ensemble is also returned. 
 
 Algorithm \ref{Method:Alg1} used this information to perform two tasks.
 First, if the performance of this aggregated estimate was better than all previously examined aggregates, the statistical model combining these methods was saved as the new optimal model (Algorithm \ref{Method:Alg1}, lines 7-9).
-Next, Algorithm \ref{Method:Alg1} pruned a method from the ensemble that provided the least amount of information to the aggregated estimate.
+Next, Algorithm \ref{Method:Alg1} pruned \rev{a} method from the ensemble that provided the least amount of information to the aggregated estimate.
 The pruning process was repeated until just two methods are left (Algorithm \ref{Method:Alg1}, lines 12-18).
 The ensemble of methods whose aggregate forecast has the lowest mean RMSE was saved and returned as the final model for the ensemble.
 This final model, and the set of methods that correspond to this model, were the final products of the statistically driven ensemble design process, referred to as the BMA-based optimal ensemble.
 
 \section{Results and Discussion} \label{Results}
-We report the results of our BMA-based ensemble in three stages.
+We report the results of our \rev{BMA-based ensemble} in three stages.
 First, we contrast the performance of the initial 17 SAMPL4 methods to the performance of the BMA-based optimal ensemble.
 We then present data on the iterative design process used to create this optimal ensemble.
 Second, we examine the \emph{conditional} performance of this optimal ensemble according to the individual molecules used in the SAMPL4 challenge.
 In this stage, we show how the BMA-based optimal ensemble provides more reliable estimates in comparison to individual methods, especially against the more challenging set of small molecules from the SAMPL4 dataset.
 Finally, we complete the analysis of the optimal ensemble by contrasting its performance to the performance of alternate statistical techniques that can be used to form aggregated estimates. 
 
-In all analyses, we report the performance based on the mean RMSE associated with the 100 X 2-fold cross-validation. 
+\rev{In all analyses, we report the performance based on the mean RMSE associated with the 100 $\times$ 2-fold cross-validation. 
 Further, we report the standard error of the mean (SEM) to better characterize the expected performance for these estimates. 
-In contrast to standard deviation, which quantifies the spread of the cross-validation distribution, the SEM metric directly maps cross-validation performance into confidence intervals that bound the true expected performance of each RMSE. 
+In contrast to standard deviation, which quantifies the spread of the cross-validation distribution, the SEM metric directly maps cross-validation performance into confidence intervals that bound the true expected performance of each RMSE.}
  
 We report the statistical significance of all performance data through a Wilcoxon rank sum paired comparison test \cite{Wilcoxon:45}.
 This non-parametric approach tests the hypothesis that the mean RMSE distributions of two approaches are equal: $H_0 : \mu_Y = \mu_X$.
 Thus when comparing BMA to a given method, a Wilcoxon generated $p$-value greater than 0.05 indicates we fail to reject $H_0$: the distributions are thus equal and we conclude that BMA and the method are equivalent in their performance.
-On the other hand, Wilcoxon generated $p$-values that are less than 0.05 indicate we should reject $H_0$.
+On the other hand, Wilcoxon-generated $p$-values that are less than 0.05 indicate we should reject $H_0$.
 In this latter case, we then compare the mean RMSE for BMA and the given method to assess performance.
 
-To control the family-wise error rate of our tests, we applied a Bonferroni correction to determine corrected $p$-values with a threshold of $\alpha = 0.05$.
+\rev{To control the family-wise error rate of our tests, we applied a Bonferroni correction to determine corrected $p$-values with a threshold of $\alpha = 0.05$.
 This correction addresses a problem that arrises in statistical analysis when analysis considering a large number of formal comparisons concurrently.
 The larger the comparison space, the more likely that a statistically significant observation will arise by chance resulting in a false positive.
-Bonferroni corrections take the parameter space into consideration under such tests to correctly adjust the false positive rate.
+Bonferroni corrections take the parameter space into consideration under such tests to correctly adjust the false positive rate.}
 
 Finally, a Shapiro-Wilk test~\cite{Shapiro:65} was used to test the hypothesis, $H_{0}$, that residuals in the SAMPL4 challenge are not significantly different from a normal population.
 This test is used to determine if samples from our distribution or residuals are distributed normally.
@@ -413,7 +416,7 @@ This line is also used in Figure~\ref{Analysis:Figure2:BMA} to contrast the iter
 \begin{figure}[h!]
 	\centering
 	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/Rev2/Exploratory_RMSE}
-	\caption{This plot illustrates the iterative pruning process discussed in Section~\ref{Method:StatEnsemble}. The y-axis depicts the mean root mean squared error (RMSE) of the different aggregated estimates based on ensembles formed during the different iterations of pruning. The x-axis indicates the stages of pruning. In general, the mean RMSE and the 95\% confidence intervals for each mean (based on standard error for the mean SEM) reduce with each iteration. The performance of the different ensembles are compared to the best performing method through the red line at $y=1.15$; all iterations past Stage 7 outperform the best method in the ensemble. Based on Wilcoxon generated p-values, the significance in the distributions of mean RMSE between the different ensembles are presented in Table~\ref{Analysis:Table2:BMA}. Based on mean RMSE, the optimal ensemble is created at Stage 16.}
+	\caption{This plot illustrates the iterative pruning process discussed in Section~\ref{Method:StatEnsemble}. The y-axis depicts the mean root mean squared error (RMSE) of the different aggregated estimates based on ensembles formed during the different iterations of pruning. The x-axis indicates the stages of pruning. In general, \rev{the mean RMSE and the 95\% confidence intervals for each mean (based on standard error for the mean SEM) were reduced} with each iteration. The performance of the different ensembles are compared to the best performing method through the red line at $y=1.15$; all iterations past Stage 7 outperform the best method in the ensemble. Based on Wilcoxon generated p-values, the significance in the distributions of mean RMSE between the different ensembles are presented in Table~\ref{Analysis:Table2:BMA}. Based on mean RMSE, the optimal ensemble is created at Stage 16.}
 	\label{Analysis:Figure2:BMA}
 \end{figure}
 %%%
@@ -430,6 +433,7 @@ The ensemble's iterative design process based on Algorithms \ref{Method:Alg1} an
 	As with column 4, bold $p$-values indicate that the performance between imp-2 and a given stage are equivalent (e.g., Stages 4-6).
 	Based on mean RMSE and p-values from this table, the optimal ensemble is the one created in Stage 16; the final column in this table lists the performance improvement this ensemble provides in comparison to the ensembles generated in previous stages.}
 	\scriptsize
+	\rev{
 	\begin{tabular}{l|c|c|c|c|c}
 		\hline
 		\hline
@@ -455,16 +459,16 @@ The ensemble's iterative design process based on Algorithms \ref{Method:Alg1} an
 		 16 & 0.82 $\pm$ 0.015 & NA  & 0.000   (vs. Stage 15)&0.000 &  0\%\\
 		\hline
 		\hline
-	\end{tabular}
+	\end{tabular}}
 	\label{Analysis:Table2:BMA}
 \end{table}
 %%%
 The process starts with the 17 initial methods shown in Table~\ref{Analysis:Table1:Methods}.
 Each subsequent row in Table~\ref{Analysis:Table2:BMA} represents an iteration through the pruning process.
-The second column lists the mean RMSE of each stage's ensemble based on its aggregated estimate.
+The second column lists the mean \rev{RMSE} of each stage's ensemble based on its aggregated estimate.
 At the end of each stage, a method is selected to be pruned from the existing ensemble before proceeding to the next iteration; the specific method that was selected is shown in column 3.
 For example, at Stage 1 there were 17 methods in the ensemble and imp-6 was selected to be removed.
-During the next step, Stage 2, imp-6 was removed from the ensemble so that there were only 16 methods used to create an aggregated estimate.
+During the next step, Stage 2, imp-6 \rev{was} removed from the ensemble \rev{so that only 16 methods were used to create the aggregated estimate}.
 At the end of this stage, alc-4 was selected to be pruned for Stage 3.
 In the final stage, the only remaining methods in the ensemble were imp-2 and alc-3.
 This iterative design process is also graphically illustrated in Figure~\ref{Analysis:Figure2:BMA} showing how selective pruning increases the performance of each successive ensemble.
@@ -476,11 +480,11 @@ Column 4 lists the Wilcoxon generated $p$-values based on comparisons of mean RM
 For example, in the second row the $p$-value for the comparison of Stage 2 vs.~Stage 1 indicates that these distributions are equivalent.
 Contrariwise, in row 4, the $p$-value for the comparison between Stage 4 and Stage 3 indicates that the distributions are not equivalent; the mean RMSE in column 2 indicates that the ensemble of Stage 4 outperforms the ensemble built in Stage 3.
 
-As a second analysis of significance, column 5 lists the Wilcoxon generated $p$-values that represent comparisons between each ensemble and the best-performing method, imp-2.
+As a second analysis of significance, column 5 lists the Wilcoxon-generated $p$-values that represent comparisons between each ensemble and the best-performing method, imp-2.
 From these values, Stages 4-6 are seen to be equivalent to imp-2.
-However, the mean RMSE distributions of all subsequent stages are not equivalent: based on mean RMSE listed in column 2, we conclude that these successive ensembles (increasingly) outperform imp-2.
+However, the mean RMSE \rev{distributions} of all subsequent stages are not equivalent: based on mean RMSE listed in column 2, we conclude that these successive ensembles (increasingly) outperform imp-2.
 The p-values in these columns and the mean RMSE results demonstrate that the optimal ensemble is created in Stage 16.
-The final column in Table~\ref{Analysis:Table2:BMA} lists the performance improvement that the Stage 16 ensemble provides in comparison to all the other ensembles generated in the design process.
+The final column in Table~\ref{Analysis:Table2:BMA} lists the performance improvement that the Stage 16 ensemble provides in comparison to \rev{all the other ensembles generated in the design process}.
 
 Figure~\ref{Analysis:Figure3:P-not} depicts a heat-map that shows the statistical information that drove the pruning process for each stage.
 %%%
@@ -494,7 +498,7 @@ Figure~\ref{Analysis:Figure3:P-not} depicts a heat-map that shows the statistica
 	Thus at Stage 1, all methods are used in the ensemble and their $\mathrm{Pr}(\beta_j^{\text{BMA}}\neq 0) $ range from ~40\% (e.g., imp-6) to ~90\% (imp-2).
 	By Stage 3, imp-6 and alc-4 have been pruned from the ensemble and the probability values have adjusted accordingly as shown in the colored column above Stage 3.
 	In general the trend across the different stages of pruning illustrates that methods become increasingly lighter, i.e., the ensemble design process becomes increasingly confident that these methods (e.g., imp-7 and exp-4) are not needed in the ensemble.
-	Contrariwise, the $\mathrm{Pr}(\beta_j^{\text{BMA}}\neq 0) $ for a few methods (e.g., alc-3, and imp-2) remain above 70\% and even increase throughout the design process, indicating a high degree of confidence in the statistical significance of these methods.}
+	\rev{Contrariwise, the $\mathrm{Pr}(\beta_j^{\text{BMA}}\neq 0) $ for a few methods (e.g., alc-3, and imp-2) remain above 70\% and even increase throughout the design process, indicating a high degree of confidence in the statistical significance of these methods.}}
 	\label{Analysis:Figure3:P-not}
 \end{figure}
 %%%
@@ -504,16 +508,17 @@ At Stage 1, all methods were used in the ensemble and their $\mathrm{Pr}(\beta_j
 As imp-6 had the lowest mean probability of not being zero, imp-6 was pruned after Stage 1; the color map colors this method white in Stage 2 to indicate it has been eliminated.
 The methods listed on the legend of the y-axis are  ordered by the sequence that they were eliminated in the design process: imp-6 first, alc-4 second, imp-8 third, etc.
 
-\subsection{Performance analysis based on compounds}
+\todo{Check section title capitalization}
+\subsection{Performance \rev{analysis based on compounds}}
 \label{Results:BMA_Molecules}
-Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} depict the performance of different methods according to specific SAMPL4 challenge small molecule compounds.
+Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} depict \rev{the} performance of different methods according to specific SAMPL4 challenge small molecule compounds.
 %%%
 \begin{figure}
 	\centering
 	\includegraphics[keepaspectratio,width=0.75\textwidth]{Figures/Rev2/error_bar_plot_no_best_split_1}
-	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE (kcal mol$^{-1}$) performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second, and third best-performing methods (i.e., imp-2, imp-8, and alc-3) as well as exp-3.
+	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE (kcal mol$^{-1}$) performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second, and third \rev{best-}performing methods (i.e., imp-2, imp-8, and alc-3) as well as exp-3.
 	Note that imp-2 and alc-3 are the methods used in the optimal BMA ensemble (Stage 15) and exp-3 is the final method eliminated from the ensemble (Table~\ref{Analysis:Table2:BMA}) in Stage 16.
-	BMA's performance based on the optimal ensemble is shown based on its distribution of the mean RMSE for estimates made in our 2-fold cross-validation analysis.
+	BMA's performance based on the optimal ensemble is shown based on its distribution of the mean \rev{RMSE} for estimates made in our 2-fold cross-validation analysis.
 	Of note is the performance of the different methods for SAMPL4\_022 (mefenamic acid), SAMPL4\_023 (diphenhydramine), SAMPL4\_027 (1,3-bis-(nitroxy)propane), SAMPL4\_009 (2,6-dichlorosyringaldehyde), and SAMPL4\_001 (mannitol).
 	These are the most challenging compounds for methods to estimate based on the analysis of Mobley et al.\@ of the SAMPL4 data~\cite{Mobley:2014}.
 	The benefits of the ensemble is clearly demonstrated here as the BMA ensemble outperforms all methods in estimating SAMPL4\_022, SAMPL4\_009, and SAMPL4\_001.
@@ -532,100 +537,102 @@ Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} 
 In addition to the optimal ensemble, we also show the performance of the first, second, and third best-performing methods from the SAMPL4 challenge: imp-2, imp-8, and alc-3.
 Methods imp-2 and alc-3 are the methods used in the optimal BMA ensemble and exp-3 is the final method eliminated from the ensemble (Stage 15 in Table~\ref{Analysis:Table2:BMA}). 
 
-Mobley et al.~\cite{Mobley:2014} note that prediction error generally increases as molecular complexity and size increases. 
+\rev{Mobley et al.~\cite{Mobley:2014} note that prediction error generally increases as molecular complexity and size increases.} 
 Specifically, polyfunctional molecules with several interacting groups were especially difficult to estimate in the SAMPL4 challenge: SAMPL4\_022 (mefenamic acid), SAMPL4\_023 (diphenhydramine), SAMPL4\_027 (1,3-bis-(nitroxy)propane), SAMPL4\_009 (2,6-dichlorosyringaldehyde), and SAMPL4\_001 (mannitol). 
 Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} show that the optimal ensemble outperforms all methods in estimating SAMPL4\_022 and SAMPL4\_001, and provides the second best estimates for SAMPL4\_009, SAMPL4\_023 and SAMPL4\_027.
 Aside from the optimal ensemble, there is no clear best method for estimating these compounds.
 For example, while imp-8 is best at estimating SAMPL4\_009, it is does not do well at estimating either SAMPL4\_023 or SAMPL4\_027.
 Similarly while imp-2 performs well at estimating SAMPL4\_023, it does not do as well at estimating SAMPL4\_009 or SAMPL4\_027.
-The general trend in performance indicates that the optimal ensemble provides more consistent and accurate estimates than any specific method. 
+The general trend in performance \rev{indicates} that the optimal ensemble provides more consistent and accurate estimates than any specific method. 
 
+\todo{Review all REV sections}
 
-\subsection{Interpreting aggregate estimate performance}
-Aggregate estimate performance is degraded by both variable (i.e., inconsistent) predictive performance of its method constituents and the uncertainties associated with statistical model construction.
-These sources of error manifest in different ways and we can characterize trends in estimation accuracy and consistency to support our analysis of these sources.
+\subsection{\ref{Interpreting aggregate estimate performance}}
+\rev{Aggregate estimate performance is degraded by both variable (i.e., inconsistent) predictive performance of its method constituents and the uncertainties associated with statistical model construction.
+These sources of error manifest in different ways and we can characterize trends in estimation accuracy and consistency to support our analysis of these sources.}
 
-If methods are sensitive to functional discrepancies between training and testing molecules, then aggregate estimates that rely on these methods may perform poorly on chemical  compounds that are outside the training set. 
+\rev{If methods are sensitive to functional discrepancies between training and testing molecules, then aggregate estimates that rely on these methods may perform poorly on chemical  compounds that are outside the training set. 
 While some of these sensitivities may be obvious to identify (e.g., methods that are only accurate for certain chemical classes), most are much more subtle and difficult to detect. 
 Cross-validation tests, like those performed in Section~\ref{Method:StatEnsemble:Design}, help assess the more obvious class or functional group-based sensitivities.
 More specifically, under cross-validation tests the overall performance of the aggregate estimate will be significantly poorer in comparison to other methods. 
 This trait will be most notable when comparing the aggregate against its method constituents on molecules where constituents are very accurate.
-In general, as method sensitivity increases, estimate accuracy and eventually consistency are negatively impacted.
+In general, as method sensitivity increases, estimate accuracy and eventually consistency are negatively impacted.}
 
-In this work the overall performance of the aggregate estimate is overall better than its constituents (Table~\ref{Analysis:Figure1:Methods}, Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2},) and significantly better than other methods.
+\rev{In this work the overall performance of the aggregate estimate is overall better than its constituents (Table~\ref{Analysis:Figure1:Methods}, Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2},) and significantly better than other methods.
 Based on these observations, large method-based sensitivities do not appear to be an issue for the SAMPL4 challenge data and so we next proceed to assess
-the sensitivities associated with statistical model construction. 
+the sensitivities associated with statistical model construction.}
 
-Statistical sensitivities in a model manifest in estimate consistency in a cross-validation study.
+\rev{Statistical sensitivities in a model manifest in estimate consistency in a cross-validation study.
 In this work, the 95\% confidence intervals of the expected mean provide a quantitative metric for assessing these types of sensitivities. 
 Under the assumption of minimal method sensitivity, a perfect statistical model will provide very precise and accurate estimates, regardless of training and testing data.
 The further away a statistical model is from this hypothetical ``perfect'' model, the more uncertainty will impact how weights are assigned in its coefficient vector, $\beta_j$.
 As a result, changes in training or testing data will results in an increasingly wider distribution of estimates (i.e., wider confidence intervals) and will impact the model's accuracy.
-In extreme cases, these distributions may even become bimodal.
+In extreme cases, these distributions may even become bimodal.}
 
-In this work, the overall performance of the aggregate estimate is very consistent across chemical compounds (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2},) with the exception of SAMPL4\_001 and SAMPL4\_045.
+\rev{In this work, the overall performance of the aggregate estimate is very consistent across chemical compounds (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2},) with the exception of SAMPL4\_001 and SAMPL4\_045.
 For SAMPL4\_001 and SAMPL4\_045, the 95\% confidence intervals for the expected mean are noticeably wider then other compounds.
 As these estimates are still very accurate in comparison to the ensemble's constituents, it is reasonable to assume that the underlying statistical model of the optimal is largely valid across the space of chemical compounds defined by the SAMPL4 challenge.
-Thus, while there appears to be indications of statistical sensitivity, it may be more effective to address the performance of methods for these two compounds first before refining the statistical model.
+Thus, while there appears to be indications of statistical sensitivity, it may be more effective to address the performance of methods for these two compounds first before refining the statistical model.}
 
-Given the assumption of minimal method and statistical sensitivities, there are several chemical compounds that deserve specific attention: SAMPL4\_002, SAMPL4\_017, SAMPL4\_024, SAMPL4\_030, and SAMPL4\_047.
+\rev{Given the assumption of minimal method and statistical sensitivities, there are several chemical compounds that deserve specific attention: SAMPL4\_002, SAMPL4\_017, SAMPL4\_024, SAMPL4\_030, and SAMPL4\_047.
 In all of these cases, aggregate's estimate is outperformed by its constituents.
 For three of the compounds,  SAMPL4\_002, SAMPL4\_017, and SAMPL4\_030, the degree of error is very small in comparison to the ensemble's constituents. 
 It is likely that statistical uncertainties are playing a role in degrading performance for these three such that the underlying model has lost some accuracy, but maintained consistency.
-Addressing these concerns is usually best done by increasing the size of training and testing pools to provide the statistical design process more exemplar data.
+Addressing these concerns is usually best done by increasing the size of training and testing pools to provide the statistical design process more exemplar data.}
 
-In comparison to the previous compounds, aggregate estimate performance for SAMPL4\_024 and SAMPL4\_047 is notably poor.
+\rev{In comparison to the previous compounds, aggregate estimate performance for SAMPL4\_024 and SAMPL4\_047 is notably poor.
 Further, the usual indicators of method and statistical sensitivities do not provide evidence to explain this performance loss.
 For example confidence bounds for these estimates are narrow, indicating that estimates are consistent regardless of the cross-validation training and testing sets.
-Additionally, total mean estimation errors are largely restricted to these two specific chemicals, indicating that overall the model is valid and accurate for the SAMPL4 challenge data. 
+Additionally, total mean estimation errors are largely restricted to these two specific chemicals, indicating that overall the model is valid and accurate for the SAMPL4 challenge data.}
  
-One explanation for these trends may be that the current optimal ensemble experiences a more subtle statistical or method-based sensitivity for these specific chemical compounds. 
+\rev{One explanation for these trends may be that the current optimal ensemble experiences a more subtle statistical or method-based sensitivity for these specific chemical compounds. 
 For example, Mobley et al.~\cite{Mobley:2014} indicate that these two specific chemical compounds are the largest MW compounds evaluated by the SAMPL4 challenge: SAMPL4\_024 is amitriptyline (MW 277.41) and SAMPL4\_047 is 1-(2-hydroxyethylamino)-9,10-anthraquinone (MW 267.28).
 Additionally, SAMPL4\_047 is listed as the second largest hydration free energy in the challenge.
 It is thus feasible that the ensemble design process has identified a statistical model that is valid for lighter weight, lower hydration free energy compounds but is not sufficiently accurate for larger compounds with higher free energy values.
-To test this hypothesis, the ensemble design process would need to expand to include more chemical exemplars that are similar to SAMPL4\_024 and SAMPL4\_047. 
+To test this hypothesis, the ensemble design process would need to expand to include more chemical exemplars that are similar to SAMPL4\_024 and SAMPL4\_047.}
 
-This statistical framework has designed a single model for combining two methods in order to estimate hydration free energies for any compound in the SAMPL4 challenge.
+\rev{This statistical framework has designed a single model for combining two methods in order to estimate hydration free energies for any compound in the SAMPL4 challenge.
 These method constituents are based on two different approaches for predicting hydration free energy: one is based on a multi-conformational implicit method and requires tens of minutes to make a prediction, where as the other is based on molecular dynamics and requires many hours to make the same prediction. 
 One benefit of this approach therefore is not only in improving estimation accuracy, but in providing this increase in accuracy by combining computationally expensive methods with cheaper methods.
 We envision that through this type of framework, specific ensembles of methods will be able to be developed for different classes of chemical compounds.
-In this way, a stratification of the chemical landscape (e.g., based on MW, functionality and polarization, etc.) is possible where specific classes of  compounds are mapped to distinct ensembles, and these ensembles are able to provide the best estimates for hydration free energies at the lowest possible computational cost.
+In this way, a stratification of the chemical landscape (e.g., based on MW, functionality and polarization, etc.) is possible where specific classes of  compounds are mapped to distinct ensembles, and these ensembles are able to provide the best estimates for hydration free energies at the lowest possible computational cost.}
 
 
-\subsection{Performance analysis of alternate ensemble techniques}
+\subsection{\rev{Performance analysis of alternate ensemble techniques}}
 \label{Results:BMA_Variants}
-There are other approaches beside BMA that can combine an ensemble of methods into an aggregate estimate.
-The notion of method and statistical sensitivities are also points of concern for these approaches too.
+\rev{There are alternative approaches to BMA that can combine an ensemble of methods into an aggregate estimate.
+The notion of method and statistical sensitivities are also points of concern for these alternate approaches.}
 In our cross-validation study, we evaluated four common approaches for aggregating an ensemble and evaluated their estimated benefits in comparison to BMA.
 These methods are listed in Table~\ref{Analysis:Table4:EnsembleCompare} and include: Random Forest~\cite{Breiman:2001}, Ridge Regression~\cite{Hoerl:2000}, Lasso~\cite{Tibshirani:1994}, and stepwise regression via forward selection.
 
-The difference between the BMA approach and these other approaches is in their design process.
+\rev{The difference between the BMA approach and these other approaches is in their design process.
 More specifically, each approach has a strategy for performing model specification (e.g., Section~\ref{MethodMain}).
 As we have addressed the notion of method sensitivities in the last section, the objective for this section is to compare these different approaches for model construction to highlight the effects of model sensitivities.
 As each method will select its own methods to form its own ensemble, the difference in performance for these approaches will highlight the benefits of addressing model sensitivities.
-In other words, relying on a modeling approach that does not fully address these sensitivities can mislead analysis of ensemble performance and thwart subsequent ensemble design.
+In other words, relying on a modeling approach that does not fully address these sensitivities can mislead analysis of ensemble performance and thwart subsequent ensemble design.}
 
-The random forests approach is an ensemble learning method similar to BMA. It operates by constructing a multitude of decision trees at training time and outputs an estimate based on the mean prediction of the individual trees. 
-Where as the random forest algorithm relies on the non-informative weighting, BMA's approach relies on a bayesian weighting for each estimate.
-The random forest approach is well established in computational biology and bioinformatic applications.
+\rev{The random forests approach is an ensemble learning method similar to BMA. It operates by constructing a multitude of decision trees at training time and outputs an estimate based on the mean prediction of the individual trees. 
+Where as the random forest algorithm relies on the non-informative weighting, BMA's approach relies on a Bayesian weighting for each estimate.
+The random forest approach is well established in computational biology and bioinformatic applications.}
 
-The ridge regression approach is a technique for analyzing regression data that may suffer from multicollinearity. 
+\rev{The ridge regression approach is a technique for analyzing regression data that may suffer from multicollinearity. 
 When multicollinearity occurs, it can create inaccurate estimates of the regression coefficients, $\beta_j$, resulting in an increase of standard error.
-Ridge regression addresses the concerns for high variance by adding a degree of bias to the regression estimates that will reduce overall estimate errors. 
+Ridge regression addresses the concerns for high variance by adding a degree of bias to the regression estimates that will reduce overall estimate errors.} 
 
-The last two approaches, Lasso and forward selection, are both strategies for selecting methods to use in a linear regression model (Equation~\ref{Method:E1}). 
+\rev{The last two approaches, Lasso and forward selection, are both strategies for selecting methods to use in a linear regression model (Equation~\ref{Method:E1}). 
 In forward selection, the approach starts with the assumption that all coefficients, $\beta_j$ are equal to zero.
 Next, it selects the method, $x_ij$ most correlated with $y_i$, and adds it into the model. 
 It then assesses the performance of the model and continues to add the next highest correlated methods to the model until performance no longer increases.
 Lasso follows the same general approach, but doesn't add a method fully into the model.
-Instead, Lasso penalizes the absolute size of the regression coefficients until the coefficient, $\beta_j$ for the method being added is no longer the one most correlated method with overall performance.
+Instead, Lasso penalizes the absolute size of the regression coefficients until the coefficient, $\beta_j$ for the method being added is no longer the one most correlated method with overall performance.}
 
-Table~\ref{Analysis:Table5:EnsembleVariables} lists the methods that were selected by each modeling approach. From largest to smallest ensemble the modeling ensembles are: Random Forest 14, Ridge Regression 7, Lasso 4, Forward Selection 4, and BMA 2.
+\rev{Table~\ref{Analysis:Table5:EnsembleVariables} lists the methods that were selected by each modeling approach. From largest to smallest ensemble the modeling ensembles are: Random Forest 14, Ridge Regression 7, Lasso 4, Forward Selection 4, and BMA 2.}
 
 \begin{table}[t!]
 	\centering
-	\caption[Methods used by each modeling approach]{This table lists the different methods used by each modeling approach in Section~\ref{Results:BMA_Variants}.  The performance for each of these methods is listed in Table~\ref{Analysis:Table4:EnsembleCompare} and Figure~\ref{Analysis:Figure6:Models}. Starting from the top and working down, the total number of methods used in each ensemble are: Random Forest 14, Ridge Regression 7, Lasso 4, Forward Selection 4, and BMA 2.}
+	\caption[Methods used by each modeling approach]{\rev{This table lists the different methods used by each modeling approach in Section~\ref{Results:BMA_Variants}.  The performance for each of these methods is listed in Table~\ref{Analysis:Table4:EnsembleCompare} and Figure~\ref{Analysis:Figure6:Models}. Starting from the top and working down, the total number of methods used in each ensemble are: Random Forest 14, Ridge Regression 7, Lasso 4, Forward Selection 4, and BMA 2.}}
 	\footnotesize
+	\rev{
 	\begin{tabular}{lccccccccc}
 		\hline
 		\hline
@@ -648,16 +655,15 @@ Table~\ref{Analysis:Table5:EnsembleVariables} lists the methods that were select
 		BMA (Stage 16) & - & - & - & - & - & X & - & X &\\		
 		\hline
 		\hline
-	\end{tabular}
+	\end{tabular}}
 	\label{Analysis:Table5:EnsembleVariables}
 \end{table}
-
 
 %%%
 \begin{table}[t!]
 	\centering
 	\caption[Model comparison with mean RMSE]{This table lists the performance of different ensemble approaches in comparison to the optimal ensemble designed in this work through BMA.
-	The performance of these ensemble approaches, given as the mean RMSE with standard deviation, are based on the 100 iterations of the 2-fold cross-validation experiment discussed in Section~\ref{Method:StatEnsemble}.
+	The performance of these ensemble approaches, given as the mean \rev{RMSE} with standard deviation, are based on the 100 iterations of the 2-fold cross-validation experiment discussed in Section~\ref{Method:StatEnsemble}.
 	Based on an $\alpha = 0.05$, the Wilcoxon based $p$-values indicate that BMA's improved performance is statistically significant to the other ensemble approaches for combining methods to make an aggregated estimate.
 	The last column indicates the improvement in estimation that the optimal ensemble provides to these alternate techniques: estimation accuracy is improved from 25\% to 61\%. }
 	\footnotesize
@@ -665,7 +671,7 @@ Table~\ref{Analysis:Table5:EnsembleVariables} lists the methods that were select
 		\hline
 		\hline
 		Ensemble Model  & Ensemble Mean RMSE  & p-value & Improvement\\
-		 & and Std Err Mean& & by BMA (Stage 16)\\
+		 & and Std \rev{Err Mean}& & by BMA (Stage 16)\\
 		\hline
 		Random Forest & 2.08 $\pm$1.00 & 0.00 & 61\%\\
 		Ridge & 2.06 $\pm$0.75 & 0.00 & 60\%\\
@@ -679,16 +685,16 @@ Table~\ref{Analysis:Table5:EnsembleVariables} lists the methods that were select
 \end{table}
 %%%
 These techniques were chosen as they have all been used successfully for a variety of inference tasks and are readily available for use~\cite{R:2008,sklearn_api:2013}.
-As all of these approaches construct an estimate for $\beta$, training and estimating with these approaches was performed identically to BMA, using the cross-validation detailed in Section~\ref{Method:StatEnsemble}.
+\rev{As all of these approaches construct an estimate for $\beta$, training and estimating with these approaches was performed identically to BMA, using the cross-validation detailed in Section~\ref{Method:StatEnsemble}.
 More specifically, the performance reflects the result of 100-iterations of a 2-fold cross-validation.
-We also followed the same procedure for comparing BMA's estimating capability to these alternate ensemble-based techniques.
+We also followed the same procedure for comparing BMA's estimating capability to these alternate ensemble-based techniques.}
 Figure~\ref{Analysis:Figure6:Models} and Table~\ref{Analysis:Table4:EnsembleCompare} provide an overview of the cross-validation errors for the various ensemble-based approaches and the BMA-based optimal ensemble.
 %%%
 \begin{figure}
 	\centering
 	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/BMA_Xval_baselineModels_RMSE}
 	\caption{This figure displays the performance of different ensemble approaches in comparison to the optimal ensemble designed in this work, BMA (Stage 16).
-	The mean RMSE, min, max, first, and third quartiles (kcal mol$^{-1}$) of these ensemble approaches are shown based on the 100 iterations of the 2-fold cross-validation experiment discussed in Section~\ref{Method:StatEnsemble}.
+	The mean \rev{RMSE}, min, max, first, and third quartiles (kcal mol$^{-1}$) of these ensemble approaches are shown based on the 100 iterations of the 2-fold cross-validation experiment discussed in Section~\ref{Method:StatEnsemble}.
 	Based on an $\alpha = 0.05$, the Wilcoxon based p-values (Table~\ref{Analysis:Table4:EnsembleCompare}) indicate that BMA's improved performance is statistically significant to the other approaches that can combine an ensemble of methods to make an aggregated estimate.}
 	\label{Analysis:Figure6:Models}
 \end{figure}
@@ -696,20 +702,21 @@ Figure~\ref{Analysis:Figure6:Models} and Table~\ref{Analysis:Table4:EnsembleComp
 The statistical significance of BMA's performance in Figure~\ref{Analysis:Figure6:Models} is based on $p$-values shown in Table~\ref{Analysis:Table4:EnsembleCompare}. Based on an $\alpha = 0.05$, Table \ref{Analysis:Table4:EnsembleCompare} indicates that we reject the null hypothesis for all paired comparison tests.
 BMA's mean RMSE distribution is therefore not equivalent to the mean RMSE distribution of any other ensemble-based technique. 
 As the distributions are not equal, we compared mean RMSE distributions of BMA to the other ensemble-based approaches in Figure~\ref{Analysis:Figure6:Models} and Table~\ref{Analysis:Table4:EnsembleCompare}.
-From these mean RMSEs, it is clear that the BMA-based approach outperforms all other ensemble-based estimation approaches: BMA-based estimates reduced error by approximately 60\% in comparison to Random Forest and Ridge regression methods. In comparison to Lasso, BMA reduces estimation error by approximately 27\%.
+From these mean RMSEs, it is clear that the BMA-based approach outperforms all other ensemble-based \rev{estimation} approaches: BMA-based estimates reduced error by approximately 60\% in comparison to Random Forest and Ridge regression methods. In comparison to Lasso, BMA reduces estimation error by approximately 27\%.
 Finally, in comparison to stepwise regression via forward selection, BMA reduces error by approximately 25\%.
 
 \section{Conclusions}
 This study demonstrates a proof-of-principle application of how to statistically design and aggregate an ensemble of methods for estimating solvation free energies in small molecules.
 While the performance of BMA is expected to generalize to a much broader set of small molecule estimation problems, the specific BMA model trained in this study is likely to be dependent on the small molecules used in the SAMPL4 challenge.
 
-In future work we will investigate the application of this method to broader chemical classes.
+\rev{In future work, we will investigate the application of this method to broader chemical classes.
 Specifically, we envision that this type of framework can help stratify the small molecule chemical landscape based on chemical classes defined by molecular weight, functionality and polarization, available surface area, etc.
 This stratification will map specific classes of compounds to distinct ensembles that provide the best estimates for hydration free energies at the lowest possible computational cost.
-Towards this task, we are looking at penalizing computationally expensive methods that provide minimal accuracy benefits to optimize both the accuracy of the estimates and the efficiency of the calculation.
+Towards this task, we are looking at penalizing computationally expensive methods that provide minimal accuracy benefits to optimize both the accuracy of the estimates and the efficiency of the calculation.}
 
 \subsection*{Acknowledgments}
-This research was funded by NIH grant R01 GM069702 to Nathan Baker.
+\rev{We thank the anonymous reviewers for their helpful questions and suggestions.}
+This research was funded by NIH grant R01 GM069702.
 
 \bibliography{refs}
 
