@@ -150,7 +150,11 @@ Perhaps more importantly, $\beta_j^{\text{BMA}}$ can be used to estimate new sol
 \subsection{Pruning models with Occam's window} \label{Method:StatEnsemble}
 
 The inclusion of all $2^P-1$ models in Equation~\ref{Method:E2} is not necessarily beneficial for predictive performance.
-While some models provide accurate information that will boost the ensemble's predictive accuracy and robustness, many models will be misspecified (i.e, improperly constructed  or derived).
+While some models provide accurate information that will boost the ensemble's predictive accuracy and robustness, many models will perform quite poorly.
+There are two main reasons for why models provide poor estimates.
+In the first case a model may perform poorly if it omits a method (and resultantly information) that is crucial to estimating $y_i$.
+Conversely, a model may also perform poorly if it includes methods that provide inaccurate information about $y_i$.
+In both cases, whether through the omission of useful information or the adoption of misinformation, the model is referred to as ``misspecified'', i.e., not correctly constructed or defined.
 The cumulative effect of these misspecified models, despite the fact that they are down-weighted via low posterior probabilities, can erode the ensemble's overall performance \cite{Qian:2015, Martinez-Munoz:2009, Raftery:1998, Onorante:2014, Madigan:1994, Hoeting:1999, Morales-Casique:2010}.
 Madigan and Raftery~\cite{Madigan:1994} developed the Occam's Window ensemble-pruning approach that eliminates under-performing models based on Bayesian information criteria.
 Occam's Window defines a set of models
@@ -187,6 +191,7 @@ The combination of Equations~\ref{Method:E6} and ~\ref{Method:E7} therefore prov
 At a summary level the statistical design process, shown in Algorithms~\ref{Method:Alg1} and~\ref{Method:Alg2}, proceeds in two iterative stages. 
 In both algorithms, we denote matrix and vectors with bold script and indicate row and column dimensions in superscript.
 For example, $\textbf{x}^{n \times p}$ is a matrix with $n$ rows and $p$ columns, where as $x$ is a scalar, or real value.
+Additionally,  $\textbf{0}^{n \times p}$ is a zero matrix and  $\textbf{x}^{1 \times p}$ is a zero vector; essentially, a matrix and vector of the specified dimensions where all values are 0.
  
  The first stage, presented in Algorithm~\ref{Method:Alg2}, is the analysis stage and its function is to evaluate the statistical significance of each method in the current version of the ensemble via Equation~\ref{Method:E7}.
 This information is based on a set of 2-fold cross-validation tests that randomly create training and validation datasets from the small molecule compounds  in the SAMPL4 challenge.
@@ -377,11 +382,14 @@ In contrast to standard deviation, which quantifies the spread of the cross-vali
  
 We report the statistical significance of all performance data through a Wilcoxon rank sum paired comparison test \cite{Wilcoxon:45}.
 This non-parametric approach tests the hypothesis that the mean RMSE distributions of two approaches are equal: $H_0 : \mu_Y = \mu_X$.
-To control the family-wise error rate of our tests, we applied a Bonferroni correction to determine corrected $p$-values with a threshold of $\alpha = 0.05$.
-Bonferroni corrections help address the problems that occur due to multiple concurrent comparisons; failure to address these problems can result in rejecting $H_0$ when in fact the hypothesis should not be rejected.
 Thus when comparing BMA to a given method, a Wilcoxon generated $p$-value greater than 0.05 indicates we fail to reject $H_0$: the distributions are thus equal and we conclude that BMA and the method are equivalent in their performance.
 On the other hand, Wilcoxon generated $p$-values that are less than 0.05 indicate we should reject $H_0$.
 In this latter case, we then compare the mean RMSE for BMA and the given method to assess performance.
+
+To control the family-wise error rate of our tests, we applied a Bonferroni correction to determine corrected $p$-values with a threshold of $\alpha = 0.05$.
+This correction addresses a problem that arrises in statistical analysis when analysis considering a large number of formal comparisons concurrently.
+The larger the comparison space, the more likely that a statistically significant observation will arise by chance resulting in a false positive.
+Bonferroni corrections take the parameter space into consideration under such tests to correctly adjust the false positive rate.
 
 Finally, a Shapiro-Wilk test~\cite{Shapiro:65} was used to test the hypothesis, $H_{0}$, that residuals in the SAMPL4 challenge are not significantly different from a normal population.
 This test is used to determine if samples from our distribution or residuals are distributed normally.
