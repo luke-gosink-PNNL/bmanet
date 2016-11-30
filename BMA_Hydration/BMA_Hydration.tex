@@ -45,7 +45,7 @@
 \begin{abstract}
 	This paper applies the Bayesian Model Averaging (BMA) statistical ensemble technique to estimate small molecule solvation free energies.  
 	There is a wide range \rev{of} methods \rev{available} for predicting solvation free energies, ranging from empirical statistical models to {\it ab initio} quantum mechanical approaches.
-	Each of these methods is based on a set of conceptual assumptions that can affect a method's predictive accuracy and transferability.
+	Each of these methods is based on a set of conceptual assumptions that can affect predictive accuracy and transferability.
 	Using an iterative statistical process, we have selected and combined solvation energy estimates using an ensemble of 17 diverse methods from the \rev{Statistical Assessment of Modeling of Proteins and Ligands (SAMPL)} SAMPL4 blind prediction study to form a single, aggregated solvation energy estimate. 
 	The ensemble design process evaluates the statistical information in each individual method as well as the performance of the aggregate estimate obtained from the ensemble as a whole.
 	Methods that possess minimal or redundant information are pruned from the ensemble and the evaluation process repeats until aggregate predictive performance can no longer be improved.
@@ -60,57 +60,53 @@ Accurate calculation of solvent-solute interactions is an important component of
 Solvation \rev{free} energy methods for atomically detailed molecular models have a long history of development \cite{Eisenberg:1986, Kang:1987:1, Kang:1987:2, Kang:1987:3,Kang:1987:4, Tan:2006, Gallicchio:2002,Baker:2013,Baker:2015} and have recently benefited from the curation of experimental small molecule solvation data for blind prediction challenges such as the Statistical Assessment of Modeling of Proteins and Ligands (SAMPL) challenge studies \cite{Nicholls:2008, Mobley:2009b, Klimovich:2010, Mobley:2009, Geballe:2012, Geballe:2010, Mobley:2014}.
 By presenting a larger range of solvation free energies and molecular weights than seen in common public \rev{datasets}, these challenges are helping to advance the development of solvation methods, \rev{making their estimates more accurate and robust} for a variety of molecular targets~\cite{Ellingson:2014,Muddana:2014,Fu:2014}.  
 
-Consistent across many of these challenge studies is the observation that the top-performing methods typically come from a wide range of different strategies \cite{Nicholls:2008, Mobley:2009b, Mobley:2009, Mobley:2014}.
+\rev{Top-performing methods typically come from a wide range of modeling strategies \cite{Nicholls:2008, Mobley:2009b, Mobley:2009, Mobley:2014}}.
 Across different challenges, top performers have included explicit solvation methods \cite{Klimovich:2010, Levy:1998, Mobley:2009c}, implicit solvation methods \cite{Mennucci:2007,Jorgensen:2004}, and hybrid methods that combine mixed quantum mechanics (QM) with molecular mechanical (MM) approaches \cite{Konig:2014, Kamerlin:2009}.
 In this context, there is a significant degree of uncertainty associated with how to best select, specify, and evaluate the set of parameters and mathematical systems needed to accurately estimate solvation free energies: e.g., uncertainties due to hydrophobicity \cite{Ashbaugh:1999}, surface effects \cite{Chorny:05}, and solvent asymmetries \cite{Mobley:08}.  This type of \emph{method selection uncertainty} affects a wide range of scientific and mathematical disciplines and is arguably the greatest source of error and risk associated with estimation tasks \cite{Rojas:2010, Apostolakis:1990, Devooght:1998, Neuman:2003}.
 One of the most powerful ways to address this uncertainty is by combining an ensemble of varied methods (e.g., through a weighted average) to form a single aggregated estimate \cite{Bates:1969, Opitz:1999, Rokach:2010, Hoeting:1999}.
 The motivation behind ensemble approaches is based on two principles: (1) most methods in the ensemble possess some unique, useful information; and (2) no single method is sufficient to account for all uncertainties.
 When modeled correctly, the information and strengths of individual methods can be combined, and their corresponding weaknesses and biases can be overcome by the strength of the \rev{group}~\cite{Seni:2010, Hoeting:1999,Raftery:1998,Raftery:1995}. 
 Ensemble-based estimates are therefore expected to be more reliable and accurate than individual methods, an expectation that has been upheld in numerous examples \cite{Gosink:2014, Zhang:2003, Bates:1969, Morales-Casique:2010, Opitz:1999, Rokach:2010, Hoeting:1999, Seni:2010, Raftery:2005, Vlachopoulo:2013, Seni:2010, Hoeting:1999, Raftery:1998, Raftery:1995}.
-\rev{Throughout this paper, we use the term ``method'' to refer to a specific method (and associated set of parameters, settings, etc.) used to estimate solvation free energies, and the term `model' to refer to some approach for estimating solvation free energies that could be a weighted combination of estimates from one or more methods.}
 
 This paper demonstrates the ability of an ensemble approach called Bayesian Model Averaging (BMA) \cite{Hoeting:1999} to estimate solvation free energies for 45 small molecules by combining predictions from 17 diverse methods provided by the SAMPL4 challenge dataset \cite{Mobley:2014}.
 Though BMA has been applied successfully for prediction tasks in many other domains \cite{Ye:2004, Vlachopoulo:2013, Raftery:2005, Morales-Casique:2010, Gosink:2014} this is the first application of the BMA approach \rev{to} solvation energy prediction.
 
-\section{Methods} \label{MethodMain}
-\rev{This work provides a framework for addressing the uncertainties associated with estimating  small molecule hydration free energies. 
-Throughout this paper, we use the term ``methods'' to describe the individual approaches used to calculate solvation free energies and the term ``models'' to describe statistical ensembles of method predictions.  
-We also define the term optimality, or optimal performance, as a forecasting method that provides the best \emph{overall} performance based on a variety of predictive targets: e.g., targets randomly selected through cross-validation experiments.}
+\rev{Throughout this paper, we use the term ``method'' to refer to a specific method (and associated set of parameters, settings, etc.) used to estimate solvation free energies, and the term `model' to refer to some approach for estimating solvation free energies that could be a weighted combination of estimates from one or more methods.
+We also define the term ``optimality'', or ``optimal performance'', as the forecasting method that provides the best \emph{overall} performance for targets randomly selected through cross-validation experiments.}
 
-\rev{Additionally, there are two types of ensembles that we consider in this work.
+\section{Methods} \label{MethodMain}
+\rev{This paper presents a framework for accurately  estimating  small molecule hydration free energies through ensembles of solvation free energy methods.
+The paper considers two types of ensembles.
 In the simplest case, we examine unique combinations of methods for estimating solvation free energy.
 These ensembles of methods are aggregated via a single statistical model to construct an aggregated estimate. 
 In the next level of ensembles, we examine multiple such statistical models; i.e. an ensemble of models. 
 The framework's objective is to identify the best statistical models, that are in turn based on the best combination of methods.
 Through Bayesian Model Averaging, we construct and aggregate an ensemble of ensembles (i.e., multiple statistical models that uniquely define multiple methods) to create a final aggregated model.
-This approach and ensemble in general have been shown to provide more accurate and reliable estimates based on numerous examples~\cite{Gosink:2014, Zhang:2003, Bates:1969, Morales-Casique:2010, Opitz:1999, Rokach:2010, Hoeting:1999, Seni:2010, Raftery:2005, Vlachopoulo:2013, Seni:2010, Hoeting:1999, Raftery:1998, Raftery:1995}.}
+This approach and ensemble have been shown to provide accurate and reliable estimates for numerous problem types~\cite{Gosink:2014, Zhang:2003, Bates:1969, Morales-Casique:2010, Opitz:1999, Rokach:2010, Hoeting:1999, Seni:2010, Raftery:2005, Vlachopoulo:2013, Seni:2010, Hoeting:1999, Raftery:1998, Raftery:1995}.}
 
-\rev{At a high level, the framework begins by first evaluating all methods collectively as an ensemble and uses the ensemble to make an aggregated estimate. 
-The framework then begins an iterative process of ensemble pruning, analyzing, and estimating.
-The pruning process itself is based on a comprehensive analysis of statistical models that collectively assess the information content of each method.
-During any given iteration, this process prunes the most redundant or least-accurate methods from the ensemble.
-After pruning, performance for the new ensemble is assessed and monitored through a set of cross-validation studies.
-The process repeats until all methods have been pruned.
-The ensemble that provides the best overall performance is defined as optimal and is the ensemble that is best used for future estimation tasks (e.g., for future SAMPL challenges).}
+\rev{The framework begins by evaluating all solvation methods collectively as an ensemble and uses the ensemble to make an aggregated estimate of free energy. 
+The framework then performs an iterative process of ensemble pruning, analyzing, and estimating.
+The pruning process uses statistical models that collectively assess the information content of each method.
+During each iteration, this pruning process removes the most redundant or least accurate methods from the ensemble.
+After pruning, performance for the new ensemble is assessed through a set of cross-validation studies.
+The ensemble that provides the best overall performance is defined as optimal and is the best choice for future estimation tasks (e.g., for future SAMPL challenges).}
 
-\rev{While improved estimates are certainly an important objective for this framework, we are equally interested in providing a better interpretation of the statistical ``black box'' behind these aggregated estimates. 
-Specifically, if an aggregate estimate proves to be more accurate than individual methods, it is imperative to understand how the aggregate's methods were combined so that domain knowledge may be obtained from the statistical aggregation process.
-Towards this objective, this framework provides quantitative information to characterize the optimal ensemble; e.g., with such as the following example questions.  Did the ensemble relied solely on implicit or explicit methods, or if it used variety of different methods?
+\rev{When an aggregate estimate proves to be more accurate than individual methods, understanding how individual methods were combined can help improve method development.
+Towards this objective, this framework provides quantitative information to characterize the optimal ensemble by answering the following types of questions.
+Did the ensemble relied solely on implicit or explicit methods, or if it used variety of different methods?
 Which methods contributed the most useful information in the aggregate estimate?
 Alternatively, if the ensemble is largely composed of one type of method, how do variations in parameters influence the results?}
 
-
 \subsection{Model specification with Bayesian Model Averaging (BMA)} \label{Method} 
 
-For estimates of hydration free energies, a basic BMA approach is to consider a set of solvation methods as a linear system~\cite{Hoeting:1999,Raftery:1998,Raftery:1995}.  
-Let $y_i$ for $i = 1, \ldots, N$ be a series of hydration free energy observations for a collection of molecules, and let $x_{i j}$ denote the $i^{th}$ estimate obtained from the $j^{th}$ prediction method for these observations. 
-For example, given that $y_i$ is the experimentally measured hydration free energy of benzaldehyde, each $x_{i j}$ for $j = 1, \ldots, P$ would be a specific method's estimate for this value.  
-Given $P$ solvation methods, the combination of all $x_{ij}$ forms the numerical ensemble estimate matrix that, along with $y_i$, defines a linear regression model 
+\rev{The simplest BMA approach assembles a set methods into a linear system}~\cite{Hoeting:1999,Raftery:1998,Raftery:1995}.  
+Let $y_i$ for $i = 1, \ldots, N$ be a series of hydration free energy observations for a collection of $N$ molecules, and let $x_{i j}$ denote the \rev{free energy estimate for the $i^{th}$ molecule} obtained from \rev{$1 \leq j \leq P$ prediction methods. 
+The $x_{ij}$ values form a numerical ensemble estimate matrix} that, along with $y_i$, defines a linear regression model 
 \begin{equation}
 	\label{Method:E1}
 	y_i = \sum_{j=1}^P x_{ij} \;\beta_j + \epsilon_i
 \end{equation}
-\rev{Here, the parameter vector $\beta_j$ defines the unknown relationship between the ensemble's $P$ constituents and $\epsilon_i$ is the disturbance term that captures all factors that influence the dependent variable $y_i$ \emph{other} than the regressors $x_{ij}$.
+\rev{where the parameter vector $\beta_j$ defines the unknown relationship between the ensemble's $P$ constituents and $\epsilon_i$ is a disturbance term that captures all factors that influence the dependent variable $y_i$ \emph{other} than the regressors $x_{ij}$.
 Such factors include latent variables impacting the response $y_i$, nonlinearity effects, and measurement errors associated with quantifying $y_i$, as well as stochastic, experimental effects that impact the ability to reproduce $y_i$.  
 Explicitly solving for the disturbance term is not feasible: $\epsilon_i$ is a theoretical, non-observable random term that must be estimated through an analysis of model residuals.  
 Fortunately, if the distribution of $\epsilon_i: i=1,\ldots,N$ is normal (i.e., $\epsilon \sim \mathcal{N}(0,\sigma)$) the total disturbance term's contribution to the model's estimate goes to zero as the expectation of random variables with such distributions is $E [\epsilon | X]\ = 0$.}
@@ -149,14 +145,11 @@ Perhaps more importantly, $\beta_j^{\text{BMA}}$ can be used to estimate new sol
 
 \subsection{\rev{Pruning models with Occam's window}} \label{Method:StatEnsemble}
 
-The inclusion of all $2^P-1$ models in Equation~\ref{Method:E2} is not necessarily beneficial for predictive performance.
-While some models provide accurate information that will boost the ensemble's predictive accuracy and robustness, many models will perform quite poorly.
-\rev{There are two main reasons for why models provide poor estimates.
-In the first case a model may perform poorly if it omits a method (and resultantly information) that is crucial to estimating $y_i$.
-Conversely, a model may also perform poorly if it includes methods that provide inaccurate information about $y_i$.
-In both cases, whether through the omission of useful information or the adoption of misinformation, the model is referred to as ``misspecified'', i.e., not correctly constructed or defined.}
+The inclusion of all $2^P-1$ ensemble models in Equation~\ref{Method:E2} is not necessarily beneficial for predictive performance.
+\rev{A ``misspecified'' ensemble model may perform poorly if it omits a method (and resultantly information) that is crucial to estimating $y_i$.
+Alternatively, a model may perform poorly if it includes methods that provide inaccurate information about $y_i$.}
 The cumulative effect of these misspecified models, despite the fact that they are down-weighted via low posterior probabilities, can erode the ensemble's overall performance \cite{Qian:2015, Martinez-Munoz:2009, Raftery:1998, Onorante:2014, Madigan:1994, Hoeting:1999, Morales-Casique:2010}.
-Madigan and Raftery~\cite{Madigan:1994} developed the Occam's Window ensemble-pruning approach that eliminates under-performing models based on Bayesian information criteria.
+Madigan and Raftery~\cite{Madigan:1994} developed the Occam's Window ensemble-pruning approach that eliminates under-performing models based on \rev{the Bayesian Information Criteria (BIC) discussed above.}
 Occam's Window defines a set of models
 \begin{equation} \label{Method:E5}
 	\textbf{A} := \{M^{(k)} \in \textbf{M} | BIC^{(k)} - BIC^{(min)} < 6\},
