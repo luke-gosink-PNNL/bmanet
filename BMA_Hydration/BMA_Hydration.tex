@@ -111,7 +111,7 @@ Such factors include latent variables impacting the response $y_i$, nonlinearity
 Explicitly solving for the disturbance term is not feasible: $\epsilon_i$ is a theoretical, non-observable random term that must be estimated through an analysis of model residuals.  
 Fortunately, if the distribution of $\epsilon_i: i=1,\ldots,N$ is normal (i.e., $\epsilon \sim \mathcal{N}(0,\sigma)$) the total disturbance term's contribution to the model's estimate goes to zero as the expectation of random variables with such distributions is $E [\epsilon | X]\ = 0$.}
 
-\rev{Under this assumption of normality, the objective in evaluating Equation~\ref{Method:E1} is to estimate the values $\beta_j$ that will both fit the known hydration free energy data in $y_i$ and facilitate the ability to make inferences on the hydration free energy of unknown molecules.  
+\rev{Under this assumption of normality, Equation~\ref{Method:E1} estimates the values $\beta_j$ that will fit both the known hydration free energy data in $y_i$ and facilitate the ability to make inferences on the hydration free energy of unknown molecules.  
 Many different regression techniques can estimate $\beta_j$ \cite{Hosmer:1989,Reiss:2012,Mallows:1973,Candes:2007}; however, these techniques commonly generate estimates that vary in their ability to model and infer \cite{Genell:2010,Hoeting:1999,Davidson:2006,Raftery:1995,Raftery:1998}.}
 
 BMA addresses the challenge of statistical model uncertainty by first evaluating all $2^{P}-1$ possible statistical models that can be formed from the $P$ estimation methods and combining each model's $\beta_j$ through a weighted average into an aggregated parameter vector, $\beta_j^{\text{BMA}}$ (Equation~\ref{Method:E2}).
@@ -132,11 +132,9 @@ where $B^{(k)}$ is the Bayesian Information Criteria for model $M^{(k)}$ estimat
 	B^{(k)} \approx N \log{(1-R^{2(k)})} + p^{(k)} \log{N}.
 \end{equation}
 
-\rev{The Bayesian Information Criteria (BIC) is a method for ranking models based on the model's goodness of fit, $R^2$.
-The $R^2$ is a statistical measure of how close the data are to the fitted regression line.
-It is essentially the percentage of the response variable variation that is explained by a linear mode.
-In contrast to other information criteria, the BIC strongly penalizes models for having too many parameters. 
-In essence, the BIC strikes a parsimonious balance between sufficient complexity for a model to be useful, but not so complex as to be overfitting. 
+\rev{The Bayesian Information Criteria (BIC) is a method for ranking models based on goodness of fit, $R^2$.
+The $R^2$ is a statistical measure of how close the data are to the fitted regression line, essentially the percentage of the response variable variation that is explained by a linear mode.
+The BIC strongly penalizes models for having too many parameters, striking a parsimonious balance between sufficient complexity for a model to be useful and over-fitting the data. 
 In Equation~\ref{Method:E4},  $R^{2(k)}$ is this adjusted $R^2$ for model $M^{(k)}$ that indicates the model's goodness of fit for the observations, $p^{(k)}$ is the number of methods used by the model (not including the intercept), and $N$ is the number of solvation free energy values to be predicted (i.e., the number of molecules).}
 
 The parameter vector $\beta_j^{\text{BMA}}$ obtained from Equation~\ref{Method:E2} helps to address model uncertainty by accounting for all systems of linear equations that can model the relationship between the measured solvation free energy values $y_i$ and values $x_{ij}$ predicted by each solvation method $j$.
@@ -147,14 +145,14 @@ Perhaps more importantly, $\beta_j^{\text{BMA}}$ can be used to estimate new sol
 
 The inclusion of all $2^P-1$ ensemble models in Equation~\ref{Method:E2} is not necessarily beneficial for predictive performance.
 \rev{A ``misspecified'' ensemble model may perform poorly if it omits a method (and resultantly information) that is crucial to estimating $y_i$.
-Alternatively, a model may perform poorly if it includes methods that provide inaccurate information about $y_i$.}
-The cumulative effect of these misspecified models, despite the fact that they are down-weighted via low posterior probabilities, can erode the ensemble's overall performance \cite{Qian:2015, Martinez-Munoz:2009, Raftery:1998, Onorante:2014, Madigan:1994, Hoeting:1999, Morales-Casique:2010}.
-Madigan and Raftery~\cite{Madigan:1994} developed the Occam's Window ensemble-pruning approach that eliminates under-performing models based on \rev{the Bayesian Information Criteria (BIC) discussed above.}
+Alternatively, a model may perform poorly if it includes methods that provide inaccurate information about $y_i$.
+Despite the fact that they are down-weighted via low posterior probabilities, the cumulative effect of these misspecified models, can erode the ensemble's overall performance \cite{Qian:2015, Martinez-Munoz:2009, Raftery:1998, Onorante:2014, Madigan:1994, Hoeting:1999, Morales-Casique:2010}.
+Madigan and Raftery~\cite{Madigan:1994} developed the Occam's Window ensemble-pruning approach that eliminates under-performing models based on the BIC discussed above.}
 Occam's Window defines a set of models
 \begin{equation} \label{Method:E5}
 	\textbf{A} := \{M^{(k)} \in \textbf{M} | BIC^{(k)} - BIC^{(min)} < 6\},
 \end{equation}
-where $BIC^{(min)}$ denotes the BIC of the model $M^{(k)}$ with the lowest $BIC$; low BIC indicates higher information content.
+where $BIC^{(min)}$ denotes the BIC of the model $M^{(k)}$ with the lowest $BIC$ \rev{(highest information content)}.
 The value 6 is based on Jeffreys' \cite{Jefferys:1961} and Raftery's \cite{Raftery:1995} assessment of Bayes factors for model comparison and ensures all $m_k \in \mathbf{A}$ meet a minimum statistical information criteria for the aggregation process.
 Constraining Equation~\ref{Method:E5} to the set $\+A$ accelerates the evaluation of Equation~\ref{Method:E5} and improves BMA's predictive capability \cite{Raftery:1998, Madigan:1994}:
 \begin{equation} \label{Method:E6}
@@ -177,27 +175,24 @@ where
 Equation~\ref{Method:E7} \rev{sorts and prioritizes} the methods based on their utility; i.e., the probability that the coefficient term weighting a method's estimate will \emph{not} be 0.
 The combination of Equations~\ref{Method:E6} and ~\ref{Method:E7} therefore provide a statistical framework to support an iterative, statistical process for designing an ensemble that will provide the best combination of models and methods for estimating solvation free energy.
 
-
-
- \subsection{\rev{Statistical design of method ensembles}}
+\subsection{\rev{Statistical design of method ensembles}}
  \label{Method:StatEnsemble:Design}
 \rev{The statistical design process, shown in Algorithms~\ref{Method:Alg1} and~\ref{Method:Alg2}, proceeds in two iterative stages. 
 In both algorithms, we denote matrix and vectors with bold script and indicate row and column dimensions in superscript.
 For example, $\textbf{x}^{n \times p}$ is a matrix with $n$ rows and $p$ columns, where as $x$ is a scalar, or real value.
 Additionally,  $\textbf{0}^{n \times p}$ is a zero matrix and  $\textbf{x}^{1 \times p}$ is a zero vector; essentially, a matrix and vector of the specified dimensions where all values are 0.}
 
-\rev{The first stage, presented in Algorithm~\ref{Method:Alg2}, is the analysis stage and its function is to evaluate the statistical significance of each method in the current version of the ensemble via Equation~\ref{Method:E7}.
+\rev{The first stage, presented in Algorithm~\ref{Method:Alg2}, uses Equation~\ref{Method:E7} to evaluate the statistical significance of each method in the current version of the ensemble.
 This information is based on a set of 2-fold cross-validation tests that randomly create training and validation datasets from the small molecule compounds  in the SAMPL4 challenge.
 In these tests, each method's statistical information is thus evaluated against a variety of random training and validation sets.
 The results of this first stage are then sent to stage two (Algorithm~\ref{Method:Alg1}): the ensemble pruning stage.}
 
 \rev{The second stage evaluates the performance of the current ensemble and then prunes this ensemble by removing that method with the least statistical significance.
-The process then repeats using the new, pruned ensemble.
-By monitoring the performance of each ensemble across the pruning process, the ideal set of methods is able to be identified.}
+The process then repeats using the new pruned ensemble to identify the ideal ensemble of methods.}
 
 \rev{At a more detailed level, the design process assumes an initial set of $n$ estimates made by $p$ methods, $\textbf{x}^{n \times p}$ for observations, $\textbf{y}^{n \times 1}$.
 The second and third lines initialize the root mean squared error (RMSE) and the solution for the best ensemble of models and methods.
-The algorithm will iterate over the following tasks while it still has more than two methods to evaluate (line 5 - line 19).}
+The algorithm will iterate over the following tasks while it still has more than two methods to evaluate (lines 5 -- 19).}
 
 \begin{table}[t] 
 	\begin{minipage}[t]{0.45\linewidth}\centering 
@@ -273,7 +268,8 @@ The output of this process is an ensemble of methods, $\textbf{x}_{ij}$ that are
 
 \subsection{Solvation free energy data and solvation methods} \label{EP:DataModels}
 The SAMPL4 challenge consists of 49 submissions representing a total of 19 different research groups \cite{Mobley:2014}.
-Each of these methods provides solvation free energy estimates for 45 small molecule compounds.\footnote{\rev{The original SAMPL4 study used 52 samples; thus some samples have labels like SAMPL4\_052. However, several compounds were removed during the course of the study based on ``problems with experimental values, SMILES strings, or structures for a number of compounds, resulting in removal of some compounds from the challenge.''\cite{Mobley:2014}}}
+Each of these methods provides solvation free energy estimates for 45 small molecule compounds.\footnote{\rev{The original SAMPL4 study used 52 samples; thus some samples have labels like SAMPL4\_052.
+However, several compounds were removed during the course of the study based on ``problems with experimental values, SMILES strings, or structures for a number of compounds, resulting in removal of some compounds from the challenge.''\cite{Mobley:2014}}}
 The challenge is blind in the sense that the solvation free energy values for these molecules were hidden from participants; e.g., free energy values are not found in standard solvation free energy test sets, and their values are not readily available in the literature \cite{Guthrie:2014}. 
 In this work, we restrict our analysis to a subset of 17 method submissions based on the fact that many groups made multiple submissions that were strongly correlated.
 In these cases, we chose only a single variant to ensure that multicollinearity did not inflate the significance of specific methods during model selection and averaging; such bias can create unstable estimates for $\beta^{BMA}_j$ and that \rev{in turn} can reduce BMA's \rev{estimate} accuracy \cite{Clyde:1999}.
@@ -325,8 +321,7 @@ These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the
 		\textit{Sandberg et al.~\cite{Sandberg:2013}} & \textit{imp-2} &minutes  & \textit{multi-conformation implicit} & \textit{1.15 $\pm$ 0.023} & \textit{29\%}\\
 		\textbf{BMA (Stage 16)} & \textbf{NA} & seconds & \textbf{ensemble} & \textbf{0.82} $\pm$ \textbf{0.015} & \textbf{0} \\
 		\hline
-	\end{tabular}
-}
+	\end{tabular}}
 	\label{Analysis:Table1:Methods}
 \end{table}
 %%%
@@ -352,7 +347,7 @@ Each model's information criteria $B^{(k)}$ was used to identify a reduced set o
 Based on this reduced modeling space, the coefficient terms $\beta_j^{\text{BMA}}$ were estimated through weighted averages of each statistical model's ordinary least squares solution (Equation~\ref{Method:E6}).
 We used $\beta_j^{\text{BMA}}$ to estimate the remaining 26 solvation free energy measurements that were \emph{not} used to train the BMA model.
 This task was accomplished by combining the estimates of all methods in Table~\ref{Analysis:Table1:Methods} for the validation data with $\beta_j^{\text{BMA}}$ to produce an aggregated estimate. 
-An \rev{RMSE} was obtained for the 26 estimates made on validation data.
+A \rev{RMSE} was obtained for the 26 estimates made on validation data.
 
 This process was repeated 100 times (Algorithm \ref{Method:Alg2}) so that performance for any estimation method could be reported as a mean RMSE: i.e., the mean of 100 RMSEs that each represent performance for a 2-fold cross-validation using the 26 member validation \rev{sets} described above.
 In addition to the mean RMSE, the information content provided by each method in the ensemble is also returned. 
@@ -382,10 +377,10 @@ Thus when comparing BMA to a given method, a Wilcoxon generated $p$-value greate
 On the other hand, Wilcoxon-generated $p$-values that are less than 0.05 indicate we should reject $H_0$.
 In this latter case, we then compare the mean RMSE for BMA and the given method to assess performance.
 
-\rev{To control the family-wise error rate of our tests, we applied a Bonferroni correction to determine corrected $p$-values with a threshold of $\alpha = 0.05$.
-This correction addresses a problem that arrises in statistical analysis when analysis considering a large number of formal comparisons concurrently.
-The larger the comparison space, the more likely that a statistically significant observation will arise by chance resulting in a false positive.
-Bonferroni corrections take the parameter space into consideration under such tests to correctly adjust the false positive rate.}
+\rev{To control the family-wise error rate of our tests, we applied a Bonferroni correction to determine $p$-values with a threshold of $\alpha = 0.05$.
+This correction addresses a problem that arises in statistical analysis for a large number of concurrent comparisons.
+Larger comparison spaces are more likely to yield a statistically significant observation by chance, resulting in a false positive.
+Bonferroni corrections adjust the false positive rate to account for this effect.}
 
 Finally, a Shapiro-Wilk test~\cite{Shapiro:65} was used to test the hypothesis, $H_{0}$, that residuals in the SAMPL4 challenge are not significantly different from a normal population.
 This test is used to determine if samples from our distribution or residuals are distributed normally.
@@ -538,8 +533,6 @@ For example, while imp-8 is best at estimating SAMPL4\_009, it is does not do we
 Similarly while imp-2 performs well at estimating SAMPL4\_023, it does not do as well at estimating SAMPL4\_009 or SAMPL4\_027.
 The general trend in performance \rev{indicates} that the optimal ensemble provides more consistent and accurate estimates than any specific method. 
 
-\todo{Review all REV sections}
-
 \subsection{\ref{Interpreting aggregate estimate performance}}
 \rev{Aggregate estimate performance is degraded by both variable (i.e., inconsistent) predictive performance of its method constituents and the uncertainties associated with statistical model construction.
 These sources of error manifest in different ways and we can characterize trends in estimation accuracy and consistency to support our analysis of these sources.}
@@ -551,7 +544,7 @@ More specifically, under cross-validation tests the overall performance of the a
 This trait will be most notable when comparing the aggregate against its method constituents on molecules where constituents are very accurate.
 In general, as method sensitivity increases, estimate accuracy and eventually consistency are negatively impacted.}
 
-\rev{In this work the overall performance of the aggregate estimate is overall better than its constituents (Table~\ref{Analysis:Figure1:Methods}, Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2},) and significantly better than other methods.
+\rev{The overall performance of the aggregate estimate is better than its constituents (Table~\ref{Analysis:Figure1:Methods}, Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2},) and significantly better than other methods.
 Based on these observations, large method-based sensitivities do not appear to be an issue for the SAMPL4 challenge data and so we next proceed to assess
 the sensitivities associated with statistical model construction.}
 
@@ -562,7 +555,7 @@ The further away a statistical model is from this hypothetical ``perfect'' model
 As a result, changes in training or testing data will results in an increasingly wider distribution of estimates (i.e., wider confidence intervals) and will impact the model's accuracy.
 In extreme cases, these distributions may even become bimodal.}
 
-\rev{In this work, the overall performance of the aggregate estimate is very consistent across chemical compounds (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2},) with the exception of SAMPL4\_001 and SAMPL4\_045.
+\rev{The overall performance of the aggregate estimate is very consistent across chemical compounds (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2},) with the exception of SAMPL4\_001 and SAMPL4\_045.
 For SAMPL4\_001 and SAMPL4\_045, the 95\% confidence intervals for the expected mean are noticeably wider then other compounds.
 As these estimates are still very accurate in comparison to the ensemble's constituents, it is reasonable to assume that the underlying statistical model of the optimal is largely valid across the space of chemical compounds defined by the SAMPL4 challenge.
 Thus, while there appears to be indications of statistical sensitivity, it may be more effective to address the performance of methods for these two compounds first before refining the statistical model.}
@@ -604,7 +597,8 @@ As we have addressed the notion of method sensitivities in the last section, the
 As each method will select its own methods to form its own ensemble, the difference in performance for these approaches will highlight the benefits of addressing model sensitivities.
 In other words, relying on a modeling approach that does not fully address these sensitivities can mislead analysis of ensemble performance and thwart subsequent ensemble design.}
 
-\rev{The random forests approach is an ensemble learning method similar to BMA. It operates by constructing a multitude of decision trees at training time and outputs an estimate based on the mean prediction of the individual trees. 
+\rev{The random forest approach is an ensemble learning method similar to BMA.
+	It operates by constructing multiple decision trees at training time and outputs an estimate based on the mean prediction of the individual trees. 
 Where as the random forest algorithm relies on the non-informative weighting, BMA's approach relies on a Bayesian weighting for each estimate.
 The random forest approach is well established in computational biology and bioinformatic applications.}
 
@@ -612,8 +606,8 @@ The random forest approach is well established in computational biology and bioi
 When multicollinearity occurs, it can create inaccurate estimates of the regression coefficients, $\beta_j$, resulting in an increase of standard error.
 Ridge regression addresses the concerns for high variance by adding a degree of bias to the regression estimates that will reduce overall estimate errors.} 
 
-\rev{The last two approaches, Lasso and forward selection, are both strategies for selecting methods to use in a linear regression model (Equation~\ref{Method:E1}). 
-In forward selection, the approach starts with the assumption that all coefficients, $\beta_j$ are equal to zero.
+\rev{Lasso and forward-selection are both strategies for selecting methods to use in a linear regression model (Equation~\ref{Method:E1}). 
+In forward-selection, the approach starts with the assumption that all coefficients, $\beta_j$ are equal to zero.
 Next, it selects the method, $x_ij$ most correlated with $y_i$, and adds it into the model. 
 It then assesses the performance of the model and continues to add the next highest correlated methods to the model until performance no longer increases.
 Lasso follows the same general approach, but doesn't add a method fully into the model.
