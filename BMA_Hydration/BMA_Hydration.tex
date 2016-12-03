@@ -46,7 +46,7 @@
 	This paper applies the Bayesian Model Averaging (BMA) statistical ensemble technique to estimate small molecule solvation free energies.  
 	There is a wide range \rev{of} methods \rev{available} for predicting solvation free energies, ranging from empirical statistical models to {\it ab initio} quantum mechanical approaches.
 	Each of these methods is based on a set of conceptual assumptions that can affect predictive accuracy and transferability.
-	Using an iterative statistical process, we have selected and combined solvation energy estimates using an ensemble of 17 diverse methods from the \rev{Statistical Assessment of Modeling of Proteins and Ligands (SAMPL)} SAMPL4 blind prediction study to form a single, aggregated solvation energy estimate. 
+	Using an iterative statistical process, we have selected and combined solvation energy estimates using an ensemble of 17 diverse methods from the \rev{fourth Statistical Assessment of Modeling of Proteins and Ligands (SAMPL)} blind prediction study to form a single, aggregated solvation energy estimate. 
 	The ensemble design process evaluates the statistical information in each individual method as well as the performance of the aggregate estimate obtained from the ensemble as a whole.
 	Methods that possess minimal or redundant information are pruned from the ensemble and the evaluation process repeats until aggregate predictive performance can no longer be improved.
 	We show that this process results in a final aggregate estimate that outperforms all individual methods by reducing estimate errors by as much as 91\% to $1.2$ kcal mol$^{-1}$ accuracy.
@@ -81,7 +81,8 @@ In the simplest case, we examine unique combinations of methods for estimating s
 These ensembles of methods are aggregated via a single statistical model to construct an aggregated estimate. 
 In the next level of ensembles, we examine multiple such statistical models; i.e. an ensemble of models. 
 The framework's objective is to identify the best statistical models, that are in turn based on the best combination of methods.
-Through Bayesian Model Averaging, we construct and aggregate an ensemble of ensembles (i.e., multiple statistical models that uniquely define multiple methods) to create a final aggregated model.
+Through Bayesian Model Averaging, we construct and aggregate an ensemble of ensembles (i.e., multiple statistical models that uniquely combine multiple methods) to create a final aggregated model.
+%DLM: I think it should be `combine' rather than `define' above.
 This approach and ensemble have been shown to provide accurate and reliable estimates for numerous problem types~\cite{Gosink:2014, Zhang:2003, Bates:1969, Morales-Casique:2010, Opitz:1999, Rokach:2010, Hoeting:1999, Seni:2010, Raftery:2005, Vlachopoulo:2013, Seni:2010, Hoeting:1999, Raftery:1998, Raftery:1995}.}
 
 \rev{The framework begins by evaluating all solvation methods collectively as an ensemble and uses the ensemble to make an aggregated estimate of free energy. 
@@ -697,12 +698,14 @@ This study demonstrates a proof-of-principle application of how to statistically
 While the performance of BMA is expected to generalize to a much broader set of small molecule estimation problems, the specific BMA model trained in this study is likely to be dependent on the small molecules used in the SAMPL4 challenge.
 
 \rev{In future work, we will investigate the application of this method to broader chemical classes.
+%DLM: ```broader regions of chemical space'' would be a better term in my view.
 Specifically, we envision that this type of framework can help stratify the small molecule chemical landscape based on chemical classes defined by molecular weight, functionality and polarization, available surface area, etc.
 This stratification will map specific classes of compounds to distinct ensembles that provide the best estimates for hydration free energies at the lowest possible computational cost.
 Towards this task, we are looking at penalizing computationally expensive methods that provide minimal accuracy benefits to optimize both the accuracy of the estimates and the efficiency of the calculation.}
 
 \subsection*{Acknowledgments}
-\rev{We thank the anonymous reviewers for their helpful questions and suggestions.}
+\rev{We thank the anonymous reviewers for their helpful questions and suggestions, and the SAMPL participants and organizers for making the data available.} 
+%DLM: Added SAMPL thanks in case it's appropriate (up to you).
 This research was funded by NIH grant R01 GM069702.
 
 \bibliography{refs}
