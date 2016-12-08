@@ -127,3 +127,7 @@ sympy-plots-for-*.tex/
 
 Overall_Repo/
 .DS_Store
+*.top
+*.mp
+*.tui
+acs*bib
