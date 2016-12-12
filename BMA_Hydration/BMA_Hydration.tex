@@ -326,7 +326,7 @@ These methods are summarized in Table~\ref{Analysis:Table1:Methods} based on the
 %%%
 \begin{figure}[h!]
 	\centering
-	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/Rev2/RMSE_SE}
+	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/RMSE_SE}
 	\caption{
 	This figure uses a squadron of Imperial Tie Fighters \cite{Lucas:77} to depict the mean root mean squared error \rev{(RMSE)} for the 17 initial methods used in our ensemble design process.
 	\rev{Additionally, the 95 \% confidence interval (based on standard error) for the expected mean RMSE is shown for each method.
@@ -402,7 +402,7 @@ This line is also used in Figure~\ref{Analysis:Figure2:BMA} to contrast the iter
 %%%
 \begin{figure}[h!]
 	\centering
-	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/Rev2/Exploratory_RMSE}
+	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/Exploratory_RMSE}
 	\caption{This plot illustrates the iterative pruning process discussed in Section~\ref{Method:StatEnsemble}. The y-axis depicts the mean root mean squared error (RMSE) of the different aggregated estimates based on ensembles formed during the different iterations of pruning. The x-axis indicates the stages of pruning. In general, \rev{the mean RMSE and the 95\% confidence intervals for each mean (based on standard error for the mean SEM) were reduced} with each iteration. The performance of the different ensembles are compared to the best performing method through the red line at $y=1.15$; all iterations past Stage 7 outperform the best method in the ensemble. Based on Wilcoxon generated p-values, the significance in the distributions of mean RMSE between the different ensembles are presented in Table~\ref{Analysis:Table2:BMA}. Based on mean RMSE, the optimal ensemble is created at Stage 16.}
 	\label{Analysis:Figure2:BMA}
 \end{figure}
@@ -477,7 +477,7 @@ Figure~\ref{Analysis:Figure3:P-not} depicts a heat-map that shows the statistica
 %%%
 \begin{figure}[h!]
 	\centering
-	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/Rev2/P_Not_Zero_Per_Stage2}
+	\includegraphics[keepaspectratio,width=0.9\textwidth]{Figures/P_Not_Zero_Per_Stage2}
 	\caption{This image provides a graphical depiction of the ensemble design process performed on the initial ensemble of 17 methods.
 	The color scale represents the probability, 0 - 100\%, that a given method's coefficient term, $\beta_j$ will not be zero.
 	The stages in the design process, starting at the left and moving to the right, are shown on the x-axis.
@@ -502,7 +502,7 @@ Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} 
 %%%
 \begin{figure}
 	\centering
-	\includegraphics[keepaspectratio,width=0.75\textwidth]{Figures/Rev2/error_bar_plot_no_best_split_1}
+	\includegraphics[keepaspectratio,width=0.75\textwidth]{Figures/error_bar_plot_no_best_split_1}
 	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE (kcal mol$^{-1}$) performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second, and third \rev{best-}performing methods (i.e., imp-2, imp-8, and alc-3) as well as exp-3.
 	Note that imp-2 and alc-3 are the methods used in the optimal BMA ensemble (Stage 15) and exp-3 is the final method eliminated from the ensemble (Table~\ref{Analysis:Table2:BMA}) in Stage 16.
 	BMA's performance based on the optimal ensemble is shown based on its distribution of the mean \rev{RMSE} for estimates made in our 2-fold cross-validation analysis.
@@ -515,7 +515,7 @@ Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} 
 %%%
 \begin{figure}
 	\centering
-	\includegraphics[keepaspectratio,width=0.75\textwidth]{Figures/Rev2/error_bar_plot_no_best_split_2}
+	\includegraphics[keepaspectratio,width=0.75\textwidth]{Figures/error_bar_plot_no_best_split_2}
 	\caption{This figure is one of two figures (Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2}) that depict the RMSE (kcal mol$^{-1}$) performance of several methods based on the individual compounds taken from the SAMPL4 challenge: the first, second, and third best-performing methods (i.e., imp-2, imp-8, and alc-3) as well as exp-3.
 	See Figure \ref{Analysis:Figure4:Compounds1} for more information about both plots.}
 	\label{Analysis:Figure5:Compounds2}
@@ -710,7 +710,7 @@ This research was funded by NIH grant R01 GM069702.
 
 \begin{tocentry}
 	\centering
-	\includegraphics[height=1.5in,keepaspectratio]{Figures/Single_Stage_Molecule_RMSE/Molecule_RMSE_Stage_01} 
+	\includegraphics[height=1.5in,keepaspectratio]{Figures/Molecule_RMSE_Stage_01} 
 	\mbox{} \\
 	An overview of the methods from the SAMPL4 challenge used to generate ensemble-based estimates of small molecule solvation energies.
 \end{tocentry}
