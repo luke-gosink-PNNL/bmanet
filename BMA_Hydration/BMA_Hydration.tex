@@ -16,10 +16,10 @@
 \newcommand{\+}[1]{\ensuremath{\mathbf{#1}}}
 \renewcommand{\vec}[1]{{\mathbf{#1}}}
 \newcommand{\mat}[1]{{\mathsf{#1}}}
-\renewcommand\thetable{\Roman{table}}
 
 \newcommand{\todo}[1]{\textbf{$\star \star$ {#1} $\star \star$}}
-\newcommand{\rev}[1]{\textsf{\textcolor{red}{#1}}}
+%\newcommand{\rev}[1]{\textsf{\textcolor{red}{#1}}}
+\newcommand{\rev}[1]{#1}
 \usepackage[margin=10pt,font=small,labelfont=bf]{caption}
 
 \title{Bayesian Model Averaging for Ensemble-Based Estimates of Solvation Free Energies}
@@ -47,10 +47,8 @@
 	There is a wide range \rev{of} methods \rev{available} for predicting solvation free energies, ranging from empirical statistical models to {\it ab initio} quantum mechanical approaches.
 	Each of these methods is based on a set of conceptual assumptions that can affect predictive accuracy and transferability.
 	Using an iterative statistical process, we have selected and combined solvation energy estimates using an ensemble of 17 diverse methods from the \rev{fourth Statistical Assessment of Modeling of Proteins and Ligands (SAMPL)} blind prediction study to form a single, aggregated solvation energy estimate. 
-	The ensemble design process evaluates the statistical information in each individual method as well as the performance of the aggregate estimate obtained from the ensemble as a whole.
 	Methods that possess minimal or redundant information are pruned from the ensemble and the evaluation process repeats until aggregate predictive performance can no longer be improved.
 	We show that this process results in a final aggregate estimate that outperforms all individual methods by reducing estimate errors by as much as 91\% to $1.2$ kcal mol$^{-1}$ accuracy.
-	We also compare our iterative refinement approach to other statistical ensemble approaches and demonstrate that this iterative process reduces estimate errors by as much as 61\%. 
 	This work provides a new approach for accurate solvation free energy prediction and lays the foundation for future work on aggregate models that can balance computational cost with \rev{prediction} accuracy.
 \end{abstract}
 
@@ -497,7 +495,7 @@ At Stage 1, all methods were used in the ensemble and their $\mathrm{Pr}(\beta_j
 As imp-6 had the lowest mean probability of not being zero, imp-6 was pruned after Stage 1; the color map colors this method white in Stage 2 to indicate it has been eliminated.
 The methods listed on the legend of the y-axis are  ordered by the sequence that they were eliminated in the design process: imp-6 first, alc-4 second, imp-8 third, etc.
 
-\todo{Check section title capitalization}
+%\todo{Check section title capitalization}
 \subsection{Performance \rev{analysis based on compounds}}
 \label{Results:BMA_Molecules}
 Figures~\ref{Analysis:Figure4:Compounds1} and~\ref{Analysis:Figure5:Compounds2} depict \rev{the} performance of different methods according to specific SAMPL4 challenge small molecule compounds.
@@ -709,6 +707,13 @@ Towards this task, we are looking at penalizing computationally expensive method
 This research was funded by NIH grant R01 GM069702.
 
 \bibliography{refs}
+
+\begin{tocentry}
+	\centering
+	\includegraphics[height=1.5in,keepaspectratio]{Figures/Single_Stage_Molecule_RMSE/Molecule_RMSE_Stage_01} 
+	\mbox{} \\
+	An overview of the methods from the SAMPL4 challenge used to generate ensemble-based estimates of small molecule solvation energies.
+\end{tocentry}
 
 \end{document}
 
